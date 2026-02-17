@@ -1,0 +1,338 @@
+#!/usr/bin/env python3
+"""Contar columnas de indentación al inicio de una línea.
+
+Convierte tabuladores a columnas según `tab` y devuelve el número
+de columnas usadas en el indent inicial.
+"""
+def contar_indent(linea, tab=4):
+    col = 0
+    i = 0
+    while i < len(linea):
+        ch = linea[i]
+        if ch == ' ':
+            col += 1
+        elif ch == '\t':
+            col += tab - (col % tab)
+        else:
+            break
+        i += 1
+    return col
+
+def es_ignorable(linea):
+    """Devuelve True si la línea está vacía o es solo un comentario.
+
+    Separada en función para que la lectura del lexer sea más clara.
+    """
+    s = linea.lstrip(" \t\r\n")
+    return s == "" or s.startswith("#")
+
+
+class Token:
+    #Representa un token léxico con posición y lexema.
+
+    def __init__(self, tipo, lexema, linea, col_ini, col_fin):
+        self.tipo = tipo
+        self.lexema = lexema
+        self.linea = linea
+        self.col_ini = col_ini
+        self.col_fin = col_fin
+
+    def a_linea_salida(self):
+        # Formato para el .out: (línea, inicio-fin) TIPO [valor]
+        if self.lexema:
+            return f"({self.linea}, {self.col_ini}-{self.col_fin}) {self.tipo}  valor={self.lexema}"
+        #si no tiene lexema (ej. INDENT/DEDENT), solo tipo
+        return f"({self.linea}, {self.col_ini}-{self.col_fin}) {self.tipo}"
+
+class Lexer:
+    def __init__(self, tab=4):
+        self.tab = tab 
+        self.tokens = []
+        self.errores = []
+        self.pila_indent = [0]
+
+        # Palabras clave (solo para clasificar tokens)
+        self.keywords = {
+            "int": "KW_INT",
+            "float": "KW_FLOAT",
+            "string": "KW_STRING",
+            "bool": "KW_BOOL",
+            "if": "KW_IF",
+            "else": "KW_ELSE",
+            "while": "KW_WHILE",
+            "func": "KW_FUNC",
+            "Read": "KW_READ",
+            "Write": "KW_WRITE",
+            "true": "BOOL",
+            "false": "BOOL",
+            "return": "KW_RETURN",
+            "endif": "KW_ENDIF",
+            "endwhile": "KW_ENDWHILE",
+            "endfunc": "KW_ENDFUNC",
+        }
+
+    def error(self, msg):
+        self.errores.append(msg)
+
+    def add(self, tipo, lexema, linea, col_ini, col_fin):
+        self.tokens.append(Token(tipo, lexema, linea, col_ini, col_fin))
+
+    #defino funciones auxiliares para clasificar caracteres y leer tokens específicos (ID/kw, números, cadenas)
+    def es_letra(self, ch):
+        return ('a' <= ch <= 'z') or ('A' <= ch <= 'Z') or ch == '_'
+
+    def es_alnum(self, ch):
+        return self.es_letra(ch) or ('0' <= ch <= '9')
+
+    def leer_id_o_kw(self, s, i):
+        j = i
+        while j < len(s) and self.es_alnum(s[j]):
+            j += 1
+        lex = s[i:j]
+
+        # ID máximo 
+        MAX_ID_LEN = 31
+        if len(lex) > MAX_ID_LEN:
+            return ("ID_LARGO", lex, j)
+
+    # Verificar si es keyword antes de clasificar como ID
+        if lex in self.keywords:
+            #retorna el tipo específico de keyword, no solo "KEYWORD"
+            return (self.keywords[lex], lex, j)
+
+        #si no es keyword, es ID normal
+        return ("ID", lex, j)
+
+    def leer_numero(self, s, i):
+        j = i
+        while j < len(s) and ('0' <= s[j] <= '9'):
+            j += 1
+
+        # FLOAT: dígitos '.' dígitos
+        if j < len(s) and s[j] == '.' and (j + 1) < len(s) and ('0' <= s[j+1] <= '9'):
+            j += 1
+            while j < len(s) and ('0' <= s[j] <= '9'):
+                j += 1
+            return ("FLOTANTE", s[i:j], j)
+
+        lex = s[i:j]
+        # INT sin ceros a la izquierda (excepto "0")
+        if len(lex) > 1 and lex[0] == '0':
+            return ("ENTERO_INVALIDO", lex, j)
+
+        return ("ENTERO", lex, j)
+
+    def leer_cadena(self, s, i, num_linea): 
+        j = i + 1
+        while j < len(s):
+            ch = s[j]
+            if ch == '\\':
+                if j + 1 < len(s):
+                    j += 2
+                    continue
+                break
+            if ch == '"':
+                return ("CADENA", s[i:j+1], j+1, False)
+            j += 1
+
+        # sin cerrar
+        self.error(f"[LexError] Línea {num_linea}, col {i+1}: cadena sin cerrar.")
+        return ("CADENA_ERROR", s[i:], len(s), True)
+
+    def emitir_dedents_hasta(self, num_linea, objetivo):
+        while len(self.pila_indent) > 1 and self.pila_indent[-1] > objetivo:
+            self.pila_indent.pop()
+            self.add("DEDENT", "", num_linea, 1, 1)
+
+    def tokenizar_archivo(self, ruta):
+        try:
+            with open(ruta, "r", encoding="utf-8") as f:
+                lineas = f.read().splitlines()
+        except Exception as e:
+            self.error(f"[IOError] No se pudo abrir '{ruta}': {e}")
+            return self.tokens
+
+        for num_linea, raw in enumerate(lineas, start=1):
+
+            # Ignorar líneas vacías o comentario completo
+            if es_ignorable(raw):
+                continue
+
+            # INDENT/DEDENT por cambio de nivel (solo mecánico)
+            indent_actual = contar_indent(raw, self.tab)
+            cima = self.pila_indent[-1]
+
+            if indent_actual > cima:
+                self.pila_indent.append(indent_actual)
+                self.add("INDENT", "", num_linea, 1, 1)
+            elif indent_actual < cima:
+                self.emitir_dedents_hasta(num_linea, indent_actual)
+                if self.pila_indent[-1] != indent_actual:
+                    self.error(f"[IndentError] Línea {num_linea}: indentación inválida {indent_actual} (no coincide con pila).")
+
+            # Tokenización: recorrer la línea (ignorando espacios internos)
+            i = 0
+            # saltar espacios/tabs iniciales (para tokens)
+            while i < len(raw) and raw[i] in (' ', '\t', '\r'):
+                i += 1
+
+            while i < len(raw):
+                ch = raw[i]
+                col_ini = i + 1
+
+                # comentario inline: ignorar resto
+                if ch == '#':
+                    break
+
+                # espacios internos
+                if ch == ' ' or ch == '\t' or ch == '\r':
+                    i += 1
+                    continue
+
+                # 2-char primero (evita ambigüedad)
+                if i + 1 < len(raw):
+                    dos = raw[i] + raw[i+1]
+                    if dos in ("!=", "==", "<=", ">=", "&&", "||", "++", "--"):
+                        tipo = {
+                            "!=": "NE",
+                            "==": "EQEQ",
+                            "<=": "LE",
+                            ">=": "GE",
+                            "&&": "AND",
+                            "||": "OR",
+                            "++": "INC",
+                            "--": "DEC",
+                        }[dos]
+                        self.add(tipo, dos, num_linea, col_ini, col_ini + 1)
+                        i += 2
+                        continue
+
+                # 1-char operadores aritméticos
+                if ch in "+-*/%":
+                    tipo = {"+": "PLUS", "-": "MINUS", "*": "STAR", "/": "SLASH", "%": "MOD"}[ch]
+                    self.add(tipo, ch, num_linea, col_ini, col_ini)
+                    i += 1
+                    continue
+
+                # 1-char relacionales / asignación
+                if ch in "<>=":
+                    tipo = {"<": "LT", ">": "GT", "=": "EQ"}[ch]
+                    self.add(tipo, ch, num_linea, col_ini, col_ini)
+                    i += 1
+                    continue
+
+                # NOT
+                if ch == '!':
+                    self.add("NOT", ch, num_linea, col_ini, col_ini)
+                    i += 1
+                    continue
+
+                # símbolos especiales
+                if ch in "{}()[];:,":
+                    tipo = {
+                        "{": "LBRACE", "}": "RBRACE",
+                        "(": "LPAREN", ")": "RPAREN",
+                        "[": "LBRACK", "]": "RBRACK",
+                        ";": "SEMI", ":": "COLON", ",": "COMMA",
+                    }[ch]
+                    self.add(tipo, ch, num_linea, col_ini, col_ini)
+                    i += 1
+                    continue
+
+                # cadena
+                if ch == '"':
+                    tipo, lex, j, _ = self.leer_cadena(raw, i, num_linea)
+                    self.add(tipo, lex, num_linea, col_ini, col_ini + len(lex) - 1)
+                    i = j
+                    continue
+
+                # número
+                if '0' <= ch <= '9':
+                    tipo, lex, j = self.leer_numero(raw, i)
+                    if tipo == "ENTERO_INVALIDO":
+                        self.error(f"[LexError] Línea {num_linea}, col {col_ini}: entero con cero a la izquierda '{lex}'.")
+                        tipo = "ENTERO"  # lo aceptamos para seguir
+                    self.add(tipo, lex, num_linea, col_ini, col_ini + len(lex) - 1)
+                    i = j
+                    continue
+
+                # ID / keyword
+                if self.es_letra(ch):
+                    tipo, lex, j = self.leer_id_o_kw(raw, i)
+                    if tipo == "ID_LARGO":
+                        self.error(f"[LexError] Línea {num_linea}, col {col_ini}: identificador >31 caracteres '{lex}'.")
+                        # Aceptamos recortar para continuar, pero registramos el lexema original.
+                        lex2 = lex[:31]
+                        self.add("ID", lex2, num_linea, col_ini, col_ini + len(lex2) - 1)
+                        i = j
+                        continue
+                    self.add(tipo, lex, num_linea, col_ini, col_ini + len(lex) - 1)
+                    i = j
+                    continue
+
+                # carácter inválido
+                self.error(f"[LexError] Línea {num_linea}, col {col_ini}: carácter inválido '{ch}'.")
+                self.add("ERROR_CHAR", ch, num_linea, col_ini, col_ini)
+                i += 1
+
+            # NEWLINE significativo al final de cada línea significativa
+            self.add("NEWLINE", "\\n", num_linea, len(raw) + 1, len(raw) + 1)
+
+        # cerrar dedents pendientes al final
+        ultima_linea = len(lineas) if len(lineas) > 0 else 1
+        while len(self.pila_indent) > 1:
+            self.pila_indent.pop()
+            self.add("DEDENT", "", ultima_linea, 1, 1)
+
+        self.add("EOF", "", ultima_linea, 1, 1)
+        return self.tokens
+
+
+def nombre_salida_out(ruta_entrada):
+    nombre_base = ruta_entrada.split("/")[-1]  # quitar carpetas
+    nombre_sin_ext = nombre_base.replace(".mlng", "")
+    return "salidas/" + nombre_sin_ext + ".out"
+
+def escribir_out(ruta_out, tokens):
+    with open(ruta_out, "w", encoding="utf-8") as f:
+        for t in tokens:
+            f.write(t.a_linea_salida() + "\n")
+
+
+def main():
+    print("Lexemazor para lenguaje Micro (Fase 1)")
+    archivo = input("Archivo de entrada: ").strip()
+    ruta = "pruebas/" + archivo
+
+    if ruta == "":
+        print("Error: no se ingresó archivo.")
+        return
+
+    # Intentar abrir archivo
+    try:
+        with open(ruta, "r", encoding="utf-8") as f:
+            contenido = f.read()
+    except:
+        print("Error: no se pudo abrir el archivo.")
+        return
+
+    # Si llegó aquí, el archivo existe
+    lexer = Lexer(tab=4)
+    tokens = lexer.tokenizar_archivo(ruta)
+
+    ruta_out = nombre_salida_out(ruta)
+    escribir_out(ruta_out, tokens)
+
+    if len(lexer.errores) == 0:
+        print("Éxito: no se encontraron errores léxicos.")
+    else:
+        print("Errores léxicos encontrados:")
+        for e in lexer.errores:
+            print(e)
+
+    print("Salida principal escrita en:", ruta_out)
+
+
+
+if __name__ == "__main__":
+    main()

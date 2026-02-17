@@ -1,0 +1,8 @@
+int x = 0
+Read(x)
+
+while (x < 3):
+    Write(x)
+    x = x + 1
+
+Write("Fin")

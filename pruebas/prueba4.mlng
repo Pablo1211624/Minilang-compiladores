@@ -1,0 +1,7 @@
+func suma(int x, int y):
+    int r = x + y
+    Write(r)
+
+int a = 10
+int b = 20
+suma(a, b)

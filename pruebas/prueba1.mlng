@@ -1,0 +1,2 @@
+string msg = "Hola Mundo"
+Write(msg)
