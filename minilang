@@ -122,22 +122,16 @@ class Lexer:
 
         return ("ENTERO", lex, j)
 
-    def leer_cadena(self, s, i, num_linea): 
+    def leer_cadena(self, s, i, num_linea):
         j = i + 1
-        while j < len(s):
-            ch = s[j]
-            if ch == '\\':
-                if j + 1 < len(s):
-                    j += 2
-                    continue
-                break
-            if ch == '"':
-                return ("CADENA", s[i:j+1], j+1, False)
+        while j < len(s) and s[j] != '"':
             j += 1
 
-        # sin cerrar
-        self.error(f"[LexError] Línea {num_linea}, col {i+1}: cadena sin cerrar.")
-        return ("CADENA_ERROR", s[i:], len(s), True)
+        if j < len(s):
+            return ("CADENA", s[i:j+1], j+1)
+    
+        self.error(f"[LexError] Línea {num_linea}: cadena sin cerrar.")
+        return ("CADENA_ERROR", s[i:], len(s))
 
     def emitir_dedents_hasta(self, num_linea, objetivo):
         while len(self.pila_indent) > 1 and self.pila_indent[-1] > objetivo:
