@@ -2,10 +2,9 @@
 (1, 8-10) ID  valor=msg
 (1, 12-12) EQ  valor==
 (1, 14-25) CADENA  valor="Hola Mundo"
-(1, 26-26) NEWLINE  valor=\n
+(1, 1-1) NEWLINE  valor=\n
 (2, 1-5) KW_WRITE  valor=Write
 (2, 6-6) LPAREN  valor=(
 (2, 7-9) ID  valor=msg
 (2, 10-10) RPAREN  valor=)
-(2, 11-11) NEWLINE  valor=\n
 (2, 1-1) EOF
