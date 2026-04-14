@@ -167,6 +167,12 @@ def t_error(t):
 
 lexer = lex.lex()
 
+def find_column(input, token):
+    last_cr = input.rfind('\n', 0, token.lexpos)
+    if last_cr < 0:
+        last_cr = -1
+    return (token.lexpos - last_cr)
+
 
 precedence = (
     ('left', 'OR'),
@@ -308,11 +314,10 @@ def p_factor(p):
         p[0] = p[2]
 
 # ERROR
-def p_error(p):
-    if p:
-        print(f"Error sintactico en '{p.value}' linea {p.lineno}")
-    else:
-        print("Error sintactico al final")
+def t_error(t):
+    col = find_column(t.lexer.lexdata, t)
+    print(f"Línea {t.lexer.lineno}, Columna {col}, Símbolo '{t.value[0]}', Error: Caracter ilegal")
+    t.lexer.skip(1)
 
 parser = yacc.yacc()
 
