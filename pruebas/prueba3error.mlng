@@ -1,4 +1,0 @@
-int nombre_demasiado_largo_para_ser_identificador123 = 5
-Read(nombre_demasiado_largo_para_ser_identificador123)
-if (nombre_demasiado_largo_para_ser_identificador123 > 0):
-    Write(nombre_demasiado_largo_para_ser_identificador123)

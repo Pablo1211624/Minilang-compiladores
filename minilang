@@ -1,441 +1,324 @@
-#!/usr/bin/env python3
-import tkinter as tk
-from tkinter import filedialog, messagebox
-import os
+#! /usr/bin/env python3
+import ply.lex as lex
+import ply.yacc as yacc
 
-class MiniLangLexer:
-    def __init__(self, source_code, tab=4):
-        self.source = source_code
-        self.posicion = 0
-        self.linea = 1
-        self.colum = 1
-        self.tab = tab
+# ---------------------------------
+# TOKENS
+# ---------------------------------
+tokens = [
+    'ID', 'ENTERO', 'FLOTANTE', 'CADENA',
 
-        self.tokens = []
-        self.errores = []
+    'PLUS', 'MINUS', 'STAR', 'SLASH', 'MOD',
 
-        self.inicio_de_linea = True
-        self.linea_tiene_token = False
+    'LT', 'GT', 'LE', 'GE', 'EQ', 'NE', 'EQEQ',
 
-        self.pila_indent = [0]
+    'LPARENTESIS', 'RPARENTESIS',
+    'LLLAVE', 'RLLAVE',
 
-        self.keywords = {
-            "int": "KW_INT",
-            "float": "KW_FLOAT",
-            "string": "KW_STRING",
-            "bool": "KW_BOOL",
-            "if": "KW_IF",
-            "else": "KW_ELSE",
-            "while": "KW_WHILE",
-            "func": "KW_FUNC",
-            "Read": "KW_READ",
-            "Write": "KW_WRITE",
-            "true": "BOOL",
-            "false": "BOOL",
-        }
+    'PUNTOPUNTO', 'COMA',
 
-    def caracter_actual(self):
-        if self.posicion >= len(self.source):
-            return None
-        return self.source[self.posicion]
+    'NEWLINE', 'INDENT', 'DEDENT'
+]
 
-    def mirar_siguiente(self):
-        if self.posicion + 1 >= len(self.source):
-            return None
-        return self.source[self.posicion + 1]
+# ---------------------------------
+# KEYWORDS
+# ---------------------------------
+keywords = {
+    "int": "KW_INT",
+    "float": "KW_FLOAT",
+    "string": "KW_STRING",
+    "bool": "KW_BOOL",
+    "if": "KW_IF",
+    "else": "KW_ELSE",
+    "while": "KW_WHILE",
+    "func": "KW_FUNC",
+    "Read": "KW_READ",
+    "Write": "KW_WRITE",
+    "true": "BOOL",
+    "false": "BOOL",
+    "and": "AND",
+    "or": "OR",
+    "not": "NOT",
+}
 
-    def avanzar(self):
-        ch = self.caracter_actual()
-        self.posicion += 1
+tokens += list(set(keywords.values()))
 
-        if ch == '\n':
-            self.linea += 1
-            self.colum = 1
-            self.inicio_de_linea = True
+
+pila_indentacion = [0]
+inicio_linea = True
+linea_token = False
+tabsize = 4
+dedents_pendientes = []
+
+
+t_PLUS = r'\+'
+t_MINUS = r'-'
+t_STAR = r'\*'
+t_SLASH = r'/'
+t_MOD = r'%'
+
+t_EQEQ = r'=='
+t_NE = r'!='
+t_LE = r'<='
+t_GE = r'>='
+t_LT = r'<'
+t_GT = r'>'
+t_EQ = r'='
+
+t_LPARENTESIS = r'\('
+t_RPARENTESIS = r'\)'
+t_LLLAVE = r'\{'
+t_RLLAVE = r'\}'
+
+t_PUNTOPUNTO = r':'
+t_COMA = r','
+
+t_ignore = ' \r'
+
+
+def t_comment(t):
+    r'\#.*'
+    pass
+
+
+def t_NEWLINE(t):
+    r'\n+'
+    global inicio_linea, linea_token
+    t.lexer.lineno += len(t.value)
+
+    if linea_token:
+        linea_token = False
+        inicio_linea = True
+        return t
+
+    inicio_linea = True
+
+
+def t_INDENT(t):
+    r'[ \t]+'
+    global inicio_linea, dedents_pendientes
+
+    if not inicio_linea:
+        return
+
+    col = 0
+    for ch in t.value:
+        if ch == ' ':
+            col += 1
         else:
-            self.colum += 1
-        return ch
+            col += tabsize - (col % tabsize)
+
+    cima = pila_indentacion[-1]
+
+    if col > cima:
+        pila_indentacion.append(col)
+        t.type = 'INDENT'
+        inicio_linea = False
+        return t
+
+    elif col < cima:
+        while len(pila_indentacion) > 1 and pila_indentacion[-1] > col:
+            pila_indentacion.pop()
+            dedents_pendientes.append('DEDENT')
+
+        inicio_linea = False
+
+        if dedents_pendientes:
+            t.type = dedents_pendientes.pop(0)
+            return t
 
 
-    def agregar_token(self, tipo, lexema, lin, cini, cfin):
-        self.tokens.append({
-            "tipo": tipo,
-            "lexema": lexema,
-            "linea": lin,
-            "col_ini": cini,
-            "col_fin": cfin
-        })
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z0-9_]*'
+    global linea_token
 
-    def error(self, msg):
-        self.errores.append(msg)
+    if len(t.value) > 31:
+        print(f"Error: ID muy largo en linea {t.lexer.lineno}")
+        t.value = t.value[:31]
 
-    # Comentarios / NEWLINE
-    def ignorar_comen(self):
-        while self.caracter_actual() not in ('\n', None):
-            self.avanzar()
-
-    def newline(self):
-        # NEWLINE solo si esa línea tuvo tokens "reales"
-        if self.linea_tiene_token:
-            # La línea que terminó es (self.linea - 1)
-            self.agregar_token("NEWLINE", "\\n", self.linea - 1, 1, 1)
-
-        self.linea_tiene_token = False
-        self.inicio_de_linea = True
-
-    def consumir_indent(self):
-        col = 0
-        while True:
-            ch = self.caracter_actual()
-            if ch == ' ':
-                self.avanzar()
-                col += 1
-            elif ch == '\t':
-                self.avanzar()
-                col += self.tab - (col % self.tab)
-            else:
-                break
-
-        # Si la línea es vacía o comentario, no emitimos indent/dedent
-        if self.caracter_actual() in ('\n', None, '#'):
-            return
-
-        cima = self.pila_indent[-1]
-        if col > cima:
-            self.pila_indent.append(col)
-            self.agregar_token("INDENT", "", self.linea, 1, 1)
-        elif col < cima:
-            while len(self.pila_indent) > 1 and self.pila_indent[-1] > col:
-                self.pila_indent.pop()
-                self.agregar_token("DEDENT", "", self.linea, 1, 1)
-
-            if self.pila_indent[-1] != col:
-                self.error(f"[IndentError] Línea {self.linea}: indentación inválida {col} (no coincide con pila).")
-
-        self.inicio_de_linea = False
-
-    def es_letra(self, ch):
-        return ('a' <= ch <= 'z') or ('A' <= ch <= 'Z') or ch == '_'
-
-    def es_digito(self, ch):
-        return '0' <= ch <= '9'
-
-    def leer_identificador(self):
-        lin = self.linea
-        cini = self.colum
-        lex = ""
-
-        while True:
-            ch = self.caracter_actual()
-            if ch is None:
-                break
-            if self.es_letra(ch) or self.es_digito(ch):
-                lex += self.avanzar()
-            else:
-                break
-
-        if len(lex) > 31:
-            self.error(f"[LexError] Línea {lin}, col {cini}: ID >31 caracteres '{lex}'.")
-            lex = lex[:31]  # recorte para seguir
-
-        tipo = self.keywords.get(lex, "ID")
-        self.agregar_token(tipo, lex, lin, cini, cini + len(lex) - 1)
-        self.linea_tiene_token = True
-
-    def leer_numero(self):
-        lin = self.linea
-        cini = self.colum
-        lex = ""
-
-        while True:
-            ch = self.caracter_actual()
-            if ch is None or not self.es_digito(ch):
-                break
-            lex += self.avanzar()
-
-        # float simple: dígitos '.' dígitos
-        if self.caracter_actual() == '.' and self.es_digito(self.mirar_siguiente() or ''):
-            lex += self.avanzar()  # '.'
-            while self.es_digito(self.caracter_actual() or ''):
-                lex += self.avanzar()
-            self.agregar_token("FLOTANTE", lex, lin, cini, cini + len(lex) - 1)
-            self.linea_tiene_token = True
-            return
-
-        # entero sin ceros a la izquierda (excepto "0")
-        if len(lex) > 1 and lex[0] == '0':
-            self.error(f"[LexError] Línea {lin}, col {cini}: entero con cero a la izquierda '{lex}'.")
-
-        self.agregar_token("ENTERO", lex, lin, cini, cini + len(lex) - 1)
-        self.linea_tiene_token = True
-
-    def leer_cadena_simple(self):
-        lin = self.linea
-        cini = self.colum
-        lex = self.avanzar()  # consume la comilla inicial "
-
-        while True:
-            ch = self.caracter_actual()
-            if ch is None or ch == '\n':
-                self.error(f"[LexError] Línea {lin}, col {cini}: cadena sin cerrar.")
-                self.agregar_token("CADENA_ERROR", lex, lin, cini, self.colum)
-                self.linea_tiene_token = True
-                return
-
-            if ch == '"':
-                lex += self.avanzar()
-                self.agregar_token("CADENA", lex, lin, cini, cini + len(lex) - 1)
-                self.linea_tiene_token = True
-                return
-
-            lex += self.avanzar()
+    t.type = keywords.get(t.value, 'ID')
+    linea_token = True
+    return t
 
 
-    def tokenize(self):
-        while self.caracter_actual() is not None:
-            ch = self.caracter_actual()
+def t_FLOTANTE(t):
+    r'\d+\.\d+'
+    global linea_token
+    linea_token = True
+    return t
 
-            # Manejar indent al inicio de línea
-            if self.inicio_de_linea:
-                if ch in (' ', '\t'):
-                    self.consumir_indent()
-                    continue
-                elif ch == '\n':
-                    self.avanzar()
-                    self.newline()
-                    continue
-                elif ch == '#':
-                    self.ignorar_comen()
-                    continue
-                else:
-                    self.inicio_de_linea = False
-
-            # comentario
-            if ch == '#':
-                self.ignorar_comen()
-                continue
-
-            # salto de línea
-            if ch == '\n':
-                self.avanzar()
-                self.newline()
-                continue
-
-            # espacios
-            if ch in (' ', '\t', '\r'):
-                self.avanzar()
-                continue
-
-            # cadena
-            if ch == '"':
-                self.leer_cadena_simple()
-                continue
-
-            # ID / keyword
-            if self.es_letra(ch):
-                self.leer_identificador()
-                continue
-
-            # número
-            if self.es_digito(ch):
-                self.leer_numero()
-                continue
-
-            # operadores de 2 caracteres primero
-            dos = (ch or '') + (self.mirar_siguiente() or '')
-            if dos in ("!=", "==", "<=", ">="):
-                lin, cini = self.linea, self.colum
-                self.avanzar(); self.avanzar()
-                tipo = {"!=": "NE", "==": "EQEQ", "<=": "LE", ">=": "GE"}[dos]
-                self.agregar_token(tipo, dos, lin, cini, cini + 1)
-                self.linea_tiene_token = True
-                continue
-
-            # operadores 1 caracter
-            if ch in "+-*/%":
-                lin, cini = self.linea, self.colum
-                self.avanzar()
-                tipo = {"+": "PLUS", "-": "MINUS", "*": "STAR", "/": "SLASH", "%": "MOD"}[ch]
-                self.agregar_token(tipo, ch, lin, cini, cini)
-                self.linea_tiene_token = True
-                continue
-
-            if ch in "<>=":
-                lin, cini = self.linea, self.colum
-                self.avanzar()
-                tipo = {"<": "LT", ">": "GT", "=": "EQ"}[ch]
-                self.agregar_token(tipo, ch, lin, cini, cini)
-                self.linea_tiene_token = True
-                continue
-
-            # símbolos especiales
-            if ch in "{}()[];:,":
-                lin, cini = self.linea, self.colum
-                self.avanzar()
-                tipo = {
-                    "{": "LBRACE", "}": "RBRACE",
-                    "(": "LPAREN", ")": "RPAREN",
-                    "[": "LBRACK", "]": "RBRACK",
-                    ";": "SEMI", ":": "COLON", ",": "COMMA",
-                }[ch]
-                self.agregar_token(tipo, ch, lin, cini, cini)
-                self.linea_tiene_token = True
-                continue
-
-            # carácter inválido
-            self.error(f"[LexError] Línea {self.linea}, col {self.colum}: carácter inválido '{ch}'.")
-            self.avanzar()
-
-        # si el archivo terminó sin newline final, no obligamos NEWLINE
-        # cerrar dedents pendientes
-        while len(self.pila_indent) > 1:
-            self.pila_indent.pop()
-            self.agregar_token("DEDENT", "", self.linea, 1, 1)
-
-        self.agregar_token("EOF", "", self.linea, 1, 1)
-        return self.tokens, self.errores
+def t_ENTERO(t):
+    r'\d+'
+    global linea_token
+    linea_token = True
+    return t
 
 
-
-def ruta_out_misma(ruta_entrada):
-    # reemplaza .mlng por .out; si no termina en .mlng, añade .out
-    nombre_base = ruta_entrada.split("/")[-1]   # prueba1.mlng
-    nombre_sin_ext = nombre_base.replace(".mlng", "")
-    return "salidas/" + nombre_sin_ext + ".out"
-
-def escribir_out(ruta_out, tokens):
-    with open(ruta_out, "w", encoding="utf-8") as f:
-        for t in tokens:
-            tipo = t["tipo"]
-            lex = t["lexema"]
-            lin = t["linea"]
-            cini = t["col_ini"]
-            cfin = t["col_fin"]
-            if lex != "":
-                f.write(f"({lin}, {cini}-{cfin}) {tipo}  valor={lex}\n")
-            else:
-                f.write(f"({lin}, {cini}-{cfin}) {tipo}\n")
+def t_CADENA(t):
+    r'"([^"\\]|\\.)*"'
+    global linea_token
+    linea_token = True
+    return t
 
 
-def main():
-    print("MiniLang Lexer (Fase 1)")
-    archivo = input("Archivo de entrada (.mlng): ").strip()
+def t_error(t):
+    print(f"Caracter ilegal '{t.value[0]}' en linea {t.lexer.lineno}")
+    t.lexer.skip(1)
 
-    if archivo == "":
-        print("Error: no se ingresó archivo.")
-        return
+lexer = lex.lex()
 
-    ruta = "pruebas/" + archivo
 
-    # Abrir archivo (si falla, NO generamos .out)
-    try:
-        with open(ruta, "r", encoding="utf-8") as f:
-            code = f.read()
-    except Exception as e:
-        print(f"Error: no se pudo abrir el archivo. ({e})")
-        return
+precedence = (
+    ('left', 'OR'),
+    ('left', 'AND'),
+    ('right', 'NOT'),
+    ('nonassoc', 'LT', 'GT', 'LE', 'GE', 'EQEQ', 'NE'),
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'STAR', 'SLASH', 'MOD'),
+)
 
-    lexer = MiniLangLexer(code, tab=4)
-    tokens, errores = lexer.tokenize()
+def p_programa(p):
+    'programa : sentencias'
+    p[0] = ('programa', p[1])
 
-    ruta_out = ruta_out_misma(ruta)
-    escribir_out(ruta_out, tokens)
+def p_sentencias_multiple(p):
+    'sentencias : sentencia sentencias'
+    p[0] = [p[1]] + p[2]
 
-    # Salida secundaria
-    if len(errores) == 0:
-        print("Éxito: no se encontraron errores léxicos.")
+def p_sentencias_unica(p):
+    'sentencias : sentencia'
+    p[0] = [p[1]]
+
+def p_sentencia(p):
+    '''sentencia : declaracion_variable
+                 | asignacion
+                 | sentencia_if
+                 | sentencia_while
+                 | entrada_salida'''
+    p[0] = p[1]
+
+def p_declaracion_variable(p):
+    '''declaracion_variable : tipo ID
+                            | tipo ID EQ expresion'''
+    if len(p) == 3:
+        p[0] = ('decl', p[1], p[2])
     else:
-        print("Errores léxicos encontrados:")
-        for e in errores:
-            print(e)
+        p[0] = ('decl_assign', p[1], p[2], p[4])
 
-    print("Salida principal escrita en:", ruta_out)
+def p_asignacion(p):
+    'asignacion : ID EQ expresion'
+    p[0] = ('assign', p[1], p[3])
+
+def p_tipo(p):
+    '''tipo : KW_INT
+            | KW_FLOAT
+            | KW_STRING
+            | KW_BOOL'''
+    p[0] = p[1]
+
+# IF / ELSE
+def p_if(p):
+    '''sentencia_if : KW_IF expresion_booleana PUNTOPUNTO bloque
+                    | KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque'''
+    if len(p) == 5:
+        p[0] = ('if', p[2], p[4], None)
+    else:
+        p[0] = ('if', p[2], p[4], p[7])
+
+# WHILE
+def p_while(p):
+    'sentencia_while : KW_WHILE expresion_booleana PUNTOPUNTO bloque'
+    p[0] = ('while', p[2], p[4])
+
+# BLOQUE (INDENT)
+def p_bloque(p):
+    'bloque : NEWLINE INDENT sentencias DEDENT'
+    p[0] = p[3]
 
 
-class interfazGrafica:
-    def __init__(self):
-        self.root = tk.Tk()
-        self.root.title("MiniLang Lexer (Fase 1)")
-        self.root.geometry("926x700")
-        self.root.configure(bg="#201F1F")
+def p_io(p):
+    '''entrada_salida : KW_READ LPARENTESIS ID RPARENTESIS
+                      | KW_WRITE LPARENTESIS expresion RPARENTESIS'''
+    if p[1] == 'Read':
+        p[0] = ('read', p[3])
+    else:
+        p[0] = ('write', p[3])
 
-        self.archivoActual = None
-        self.FONDO = "#201F1F"
-        self.BarraLAT = "#252526"
-        self.BarraARRIBA = "#121212"
-        self.BarraARRIBAB = "#3F3F3F"
-        self.BarraOPCIONES = "#343333"
-        self.ExplTexto = "#cccccc"
 
-        self.barraOpc = tk.Frame(self.root, bg=self.BarraOPCIONES, width=50)
-        self.barraOpc.pack(side="left", fill="y")
-        tk.Button(self.barraOpc, text="archivos", bg=self.BarraOPCIONES, fg="white", relief="flat", command=self.abrirArchivo).pack(pady=10, fill="x")
-        tk.Button(self.barraOpc, text="verificar", bg=self.BarraOPCIONES, fg="#5efff2", relief="flat", command=self.analizar).pack(pady=10, fill="x")
+def p_bool_bin(p):
+    '''expresion_booleana : expresion_booleana AND expresion_booleana
+                          | expresion_booleana OR expresion_booleana'''
+    p[0] = ('bool_op', p[2], p[1], p[3])
 
-        self.barraL = tk.Frame(self.root, bg=self.BarraLAT, width=140)
-        self.barraL.pack(side="left", fill="y")
-        self.barraL.pack_propagate(False)
-        tk.Label(self.barraL, text="EXPLORER", bg=self.BarraLAT, fg=self.ExplTexto, font=("Consolas", 9, "bold")).pack(pady=10, padx=5)
-        self.archivoMuestra = tk.Label(self.barraL, text=" ", bg=self.BarraLAT, fg="#858585", font=("Consolas", 9))
-        self.archivoMuestra.pack(pady=5)
+def p_bool_not(p):
+    'expresion_booleana : NOT expresion_booleana'
+    p[0] = ('not', p[2])
 
-        self.barraA = tk.Frame(self.root, bg=self.BarraARRIBA, height=23)
-        self.barraA.pack(side="top", fill="x")
+def p_bool_rel(p):
+    'expresion_booleana : expresion operador_relacional expresion'
+    p[0] = ('rel', p[2], p[1], p[3])
 
-        self.barraAB = tk.Frame(self.root, bg=self.BarraARRIBAB, height=5)
-        self.barraAB.pack(side="top", fill="x")
+def p_bool_val(p):
+    'expresion_booleana : BOOL'
+    p[0] = ('bool', p[1])
 
-        self.cuadroTexto = tk.Frame(self.root, bg=self.FONDO)
-        self.cuadroTexto.pack(side="right", expand=True, fill="both")
-        self.editor = tk.Text(self.cuadroTexto, bg=self.FONDO, fg="#e3dada", insertbackground="white", relief="flat", font=("Consolas", 11), padx=10, pady=10, undo=True, wrap=tk.NONE)
-        self.editor.pack(expand=True, fill="both")
+def p_bool_paren(p):
+    'expresion_booleana : LPARENTESIS expresion_booleana RPARENTESIS'
+    p[0] = p[2]
 
-        self.consolaMensaje = tk.Text(self.cuadroTexto, bg="#111111", fg="#fffb00", height=10, relief="flat", font=("Consolas", 10), padx=10, pady=10)
-        self.consolaMensaje.pack(side="bottom", fill="x")
-        self.terminal("C:/users/personaprueba/downloads/minilang> subir un archivo .mlng y luego presione analizar")
+def p_relop(p):
+    '''operador_relacional : LT
+                           | GT
+                           | LE
+                           | GE
+                           | EQEQ
+                           | NE'''
+    p[0] = p[1]
 
-        self.root.mainloop()
+# EXPRESIONES
+def p_expr(p):
+    '''expresion : expresion PLUS termino
+                 | expresion MINUS termino'''
+    p[0] = ('binop', p[2], p[1], p[3])
 
-    def terminal(self, mensaje, error=False):
-        self.consolaMensaje.config(state=tk.NORMAL)
-        self.consolaMensaje.insert(tk.END, f"> {mensaje}\n")
-        self.consolaMensaje.config(state=tk.DISABLED)
-        self.consolaMensaje.see(tk.END)
+def p_expr_term(p):
+    'expresion : termino'
+    p[0] = p[1]
 
-    def abrirArchivo(self):
-        initial_dir = os.path.join(os.getcwd(), "pruebas")
-        if not os.path.exists(initial_dir): initial_dir = os.getcwd()
-        filepath = filedialog.askopenfilename(initialdir=initial_dir, filetypes=[("Minilang", "*.mlng"), ("Legacy", "*.mlng")])
-        if filepath:
-            with open(filepath, 'r', encoding='utf-8') as f:
-                self.editor.delete(1.0, tk.END)
-                self.editor.insert(1.0, f.read())
-            self.archivoActual = filepath
-            self.archivoMuestra.config(text=os.path.basename(filepath), fg="#e5e9ee")
-            self.terminal(f"Archivo cargado: {filepath}")
+def p_term(p):
+    '''termino : termino STAR factor
+               | termino SLASH factor
+               | termino MOD factor'''
+    p[0] = ('binop', p[2], p[1], p[3])
 
-    def analizar(self):
-        codigo = self.editor.get(1.0, tk.END)
-        lexer = MiniLangLexer(codigo)
-        tokens, errores = lexer.tokenize()
-        
-        self.consolaMensaje.config(state=tk.NORMAL)
-        self.consolaMensaje.delete(1.0, tk.END)
-        self.consolaMensaje.config(state=tk.DISABLED)
+def p_term_factor(p):
+    'termino : factor'
+    p[0] = p[1]
 
-        if self.archivoActual:
-            nombre_sin_ext = os.path.splitext(os.path.basename(self.archivoActual))[0]
-            if not os.path.exists("salidas"): os.makedirs("salidas")
-            ruta_out = os.path.join("salidas", nombre_sin_ext + ".out")
-            escribir_out(ruta_out, tokens)
-            self.terminal(f"Archivo out (la salida de errores) se ha guardado en: {ruta_out}")
-        
-        if not errores:
-            self.terminal("EXITO: No hay errores léxicos")
-        else:
-            self.terminal(f"Se encontraron {len(errores)} errores:")
-            for err in errores:
-                self.terminal(err)
+def p_factor(p):
+    '''factor : ID
+              | ENTERO
+              | FLOTANTE
+              | CADENA
+              | BOOL
+              | LPARENTESIS expresion RPARENTESIS'''
+    if len(p) == 2:
+        p[0] = ('val', p[1])
+    else:
+        p[0] = p[2]
+
+# ERROR
+def p_error(p):
+    if p:
+        print(f"Error sintactico en '{p.value}' linea {p.lineno}")
+    else:
+        print("Error sintactico al final")
+
+parser = yacc.yacc()
+
 
 if __name__ == "__main__":
-    interfazGrafica()
+    s = input("Ingrese cadena: ")
+    resultado = parser.parse(s,lexer=lexer)
+    print(resultado)
+
