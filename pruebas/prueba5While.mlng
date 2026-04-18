@@ -1,0 +1,8 @@
+int limite
+int contador = 1
+Write("Limite del contador:")
+Read(limite)
+while contador <= limite:
+    Write("Contador actual:")
+    Write(contador)
+    contador = contador + 1

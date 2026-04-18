@@ -1,0 +1,2 @@
+string saludo = "Hola Mundo"
+Write(saludo)

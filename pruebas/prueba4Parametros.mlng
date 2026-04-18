@@ -1,0 +1,5 @@
+func calcularSuma(int x, int y):
+    int suma = x + y
+    Write(suma)
+
+calcularSuma(20, 24)
