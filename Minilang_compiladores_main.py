@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import os
 import sys
+import pprint
 
 # ---------------------------------
 # TOKENS
@@ -152,7 +153,8 @@ def t_ID(t):
         t.value = t.value[:31]
 
     t.type = keywords.get(t.value, 'ID')
-    print("TOKEN:", t.type, t.value)
+    columna = find_column(t.lexer.lexdata, t)
+    print(f"[{t.lexer.lineno}:{columna}] TOKEN: {t.type:<10} | Valor: '{t.value}'")
     linea_token = True
     return t
 
@@ -160,12 +162,16 @@ def t_ID(t):
 def t_FLOTANTE(t):
     r'\d+\.\d+'
     global linea_token
+    col = find_column(t.lexer.lexdata, t)
+    print(f"[{t.lexer.lineno}:{col}] TOKEN: FLOTANTE     | Valor: '{t.value}'")
     linea_token = True
     return t
 
 def t_ENTERO(t):
     r'\d+'
     global linea_token
+    col = find_column(t.lexer.lexdata, t)
+    print(f"[{t.lexer.lineno}:{col}] TOKEN: ENTERO     | Valor: '{t.value}'")
     linea_token = True
     return t
 
@@ -173,6 +179,8 @@ def t_ENTERO(t):
 def t_CADENA(t):
     r'"([^"\\]|\\.)*"'
     global linea_token
+    col = find_column(t.lexer.lexdata, t)
+    print(f"[{t.lexer.lineno}:{col}] TOKEN: CADENA    | Valor: '{t.value}'")
     linea_token = True
     return t
 
@@ -525,15 +533,26 @@ class interfazGrafica:
                 nombreSinExte = os.path.splitext(os.path.basename(self.archivoActual))[0]
                 if not os.path.exists("salidas"): os.makedirs("salidas")
                 rutaOut = os.path.join("salidas", nombreSinExte + ".out")
-                contenidocompleto=self.consolaMensaje.get(1.0,tk.END)
+            
+                # Obtenemos todo lo que se imprimió en la consola (los tokens con línea/col)
+                contenidocompleto = self.consolaMensaje.get(1.0, tk.END).strip()
                 with open(rutaOut, "w", encoding="utf-8") as archivoout:
-                    archivoout.write(contenidocompleto.strip())
-                    archivoout.write("\nArbol:"+str(resultado)) 
-                print(f"Archivo out (la salida de errores) se ha guardado en: {rutaOut}")
+                    archivoout.write("--- ANÁLISIS LÉXICO (TOKENS) ---\n")
+                    archivoout.write(contenidocompleto)
+                    archivoout.write("\n\n--- ÁRBOL DE SINTAXIS (AST) ---\n")
+                
+                    # Usamos pformat para convertir el árbol en un string con sangría (indent)
+                    arbol_formateado = pprint.pformat(resultado, indent=4, width=80)
+                    archivoout.write(arbol_formateado)
+            
+                print(f"\n[INFO] Archivo de salida guardado en: {rutaOut}")
 
             if not hay_error:
-                print("OK")
-                print(f"Arbol:{resultado}")
+                print("\n" + "="*30)
+                print("ESTRUCTURA DEL ÁRBOL (AST)")
+                print("="*30)
+                pp = pprint.PrettyPrinter(indent=4)
+                pp.pprint(resultado)
             else:
                 print("Se encontraron errores")
         

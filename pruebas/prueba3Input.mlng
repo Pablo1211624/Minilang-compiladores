@@ -1,7 +1,7 @@
 int edad
 Write("Ingrese su edad:")
-Read(edad)
-if edad >= 18:
+Read(edad
+if edad >= 18 @
     Write("Mayor de edad")
 else:
-    Write("Menor de edad")
+    Write("Menor de edad $")

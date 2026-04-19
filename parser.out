@@ -1,0 +1,2373 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    LLLAVE
+    RLLAVE
+
+Grammar
+
+Rule 0     S' -> programa
+Rule 1     programa -> sentencias
+Rule 2     sentencias -> bloque_sentencia sentencias
+Rule 3     sentencias -> empty
+Rule 4     bloque_sentencia -> sentencia NEWLINE
+Rule 5     bloque_sentencia -> sentencia
+Rule 6     bloque_sentencia -> NEWLINE
+Rule 7     sentencia -> declaracion_variable
+Rule 8     sentencia -> asignacion
+Rule 9     sentencia -> sentencia_if
+Rule 10    sentencia -> sentencia_while
+Rule 11    sentencia -> entrada_salida
+Rule 12    sentencia -> funcion
+Rule 13    sentencia -> error NEWLINE
+Rule 14    empty -> <empty>
+Rule 15    declaracion_variable -> tipo ID
+Rule 16    declaracion_variable -> tipo ID EQ expresion
+Rule 17    asignacion -> ID EQ expresion
+Rule 18    tipo -> KW_INT
+Rule 19    tipo -> KW_FLOAT
+Rule 20    tipo -> KW_STRING
+Rule 21    tipo -> KW_BOOL
+Rule 22    sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque
+Rule 23    sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque
+Rule 24    sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque
+Rule 25    funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque
+Rule 26    parametros -> tipo ID
+Rule 27    parametros -> tipo ID COMA parametros
+Rule 28    parametros -> empty
+Rule 29    argumentos -> expresion
+Rule 30    argumentos -> expresion COMA argumentos
+Rule 31    argumentos -> empty
+Rule 32    bloque -> NEWLINE INDENT sentencias DEDENT
+Rule 33    bloque -> INDENT sentencias DEDENT
+Rule 34    entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS
+Rule 35    entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS
+Rule 36    expresion_booleana -> expresion_booleana AND expresion_booleana
+Rule 37    expresion_booleana -> expresion_booleana OR expresion_booleana
+Rule 38    expresion_booleana -> NOT expresion_booleana
+Rule 39    expresion_booleana -> expresion operador_relacional expresion
+Rule 40    expresion_booleana -> BOOL
+Rule 41    expresion_booleana -> LPARENTESIS expresion_booleana RPARENTESIS
+Rule 42    operador_relacional -> LT
+Rule 43    operador_relacional -> GT
+Rule 44    operador_relacional -> LE
+Rule 45    operador_relacional -> GE
+Rule 46    operador_relacional -> EQEQ
+Rule 47    operador_relacional -> NE
+Rule 48    expresion -> expresion PLUS termino
+Rule 49    expresion -> expresion MINUS termino
+Rule 50    expresion -> termino
+Rule 51    termino -> termino STAR factor
+Rule 52    termino -> termino SLASH factor
+Rule 53    termino -> termino MOD factor
+Rule 54    termino -> factor
+Rule 55    factor -> ID
+Rule 56    factor -> ENTERO
+Rule 57    factor -> FLOTANTE
+Rule 58    factor -> CADENA
+Rule 59    factor -> LPARENTESIS expresion RPARENTESIS
+Rule 60    factor -> ID LPARENTESIS argumentos RPARENTESIS
+
+Terminals, with rules where they appear
+
+AND                  : 36
+BOOL                 : 40
+CADENA               : 58
+COMA                 : 27 30
+DEDENT               : 32 33
+ENTERO               : 56
+EQ                   : 16 17
+EQEQ                 : 46
+FLOTANTE             : 57
+GE                   : 45
+GT                   : 43
+ID                   : 15 16 17 25 26 27 34 55 60
+INDENT               : 32 33
+KW_BOOL              : 21
+KW_ELSE              : 23
+KW_FLOAT             : 19
+KW_FUNC              : 25
+KW_IF                : 22 23
+KW_INT               : 18
+KW_READ              : 34
+KW_STRING            : 20
+KW_WHILE             : 24
+KW_WRITE             : 35
+LE                   : 44
+LLLAVE               : 
+LPARENTESIS          : 25 34 35 41 59 60
+LT                   : 42
+MINUS                : 49
+MOD                  : 53
+NE                   : 47
+NEWLINE              : 4 6 13 32
+NOT                  : 38
+OR                   : 37
+PLUS                 : 48
+PUNTOPUNTO           : 22 23 23 24 25
+RLLAVE               : 
+RPARENTESIS          : 25 34 35 41 59 60
+SLASH                : 52
+STAR                 : 51
+error                : 13
+
+Nonterminals, with rules where they appear
+
+argumentos           : 30 60
+asignacion           : 8
+bloque               : 22 23 23 24 25
+bloque_sentencia     : 2
+declaracion_variable : 7
+empty                : 3 28 31
+entrada_salida       : 11
+expresion            : 16 17 29 30 35 39 39 48 49 59
+expresion_booleana   : 22 23 24 36 36 37 37 38 41
+factor               : 51 52 53 54
+funcion              : 12
+operador_relacional  : 39
+parametros           : 25 27
+programa             : 0
+sentencia            : 4 5
+sentencia_if         : 9
+sentencia_while      : 10
+sentencias           : 1 2 32 33
+termino              : 48 49 50 51 52 53
+tipo                 : 15 16 26 27
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programa
+    (1) programa -> . sentencias
+    (2) sentencias -> . bloque_sentencia sentencias
+    (3) sentencias -> . empty
+    (4) bloque_sentencia -> . sentencia NEWLINE
+    (5) bloque_sentencia -> . sentencia
+    (6) bloque_sentencia -> . NEWLINE
+    (14) empty -> .
+    (7) sentencia -> . declaracion_variable
+    (8) sentencia -> . asignacion
+    (9) sentencia -> . sentencia_if
+    (10) sentencia -> . sentencia_while
+    (11) sentencia -> . entrada_salida
+    (12) sentencia -> . funcion
+    (13) sentencia -> . error NEWLINE
+    (15) declaracion_variable -> . tipo ID
+    (16) declaracion_variable -> . tipo ID EQ expresion
+    (17) asignacion -> . ID EQ expresion
+    (22) sentencia_if -> . KW_IF expresion_booleana PUNTOPUNTO bloque
+    (23) sentencia_if -> . KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque
+    (24) sentencia_while -> . KW_WHILE expresion_booleana PUNTOPUNTO bloque
+    (34) entrada_salida -> . KW_READ LPARENTESIS ID RPARENTESIS
+    (35) entrada_salida -> . KW_WRITE LPARENTESIS expresion RPARENTESIS
+    (25) funcion -> . KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque
+    (18) tipo -> . KW_INT
+    (19) tipo -> . KW_FLOAT
+    (20) tipo -> . KW_STRING
+    (21) tipo -> . KW_BOOL
+
+    NEWLINE         shift and go to state 6
+    $end            reduce using rule 14 (empty -> .)
+    error           shift and go to state 13
+    ID              shift and go to state 15
+    KW_IF           shift and go to state 16
+    KW_WHILE        shift and go to state 17
+    KW_READ         shift and go to state 18
+    KW_WRITE        shift and go to state 19
+    KW_FUNC         shift and go to state 20
+    KW_INT          shift and go to state 21
+    KW_FLOAT        shift and go to state 22
+    KW_STRING       shift and go to state 23
+    KW_BOOL         shift and go to state 24
+
+    programa                       shift and go to state 1
+    sentencias                     shift and go to state 2
+    bloque_sentencia               shift and go to state 3
+    empty                          shift and go to state 4
+    sentencia                      shift and go to state 5
+    declaracion_variable           shift and go to state 7
+    asignacion                     shift and go to state 8
+    sentencia_if                   shift and go to state 9
+    sentencia_while                shift and go to state 10
+    entrada_salida                 shift and go to state 11
+    funcion                        shift and go to state 12
+    tipo                           shift and go to state 14
+
+state 1
+
+    (0) S' -> programa .
+
+
+
+state 2
+
+    (1) programa -> sentencias .
+
+    $end            reduce using rule 1 (programa -> sentencias .)
+
+
+state 3
+
+    (2) sentencias -> bloque_sentencia . sentencias
+    (2) sentencias -> . bloque_sentencia sentencias
+    (3) sentencias -> . empty
+    (4) bloque_sentencia -> . sentencia NEWLINE
+    (5) bloque_sentencia -> . sentencia
+    (6) bloque_sentencia -> . NEWLINE
+    (14) empty -> .
+    (7) sentencia -> . declaracion_variable
+    (8) sentencia -> . asignacion
+    (9) sentencia -> . sentencia_if
+    (10) sentencia -> . sentencia_while
+    (11) sentencia -> . entrada_salida
+    (12) sentencia -> . funcion
+    (13) sentencia -> . error NEWLINE
+    (15) declaracion_variable -> . tipo ID
+    (16) declaracion_variable -> . tipo ID EQ expresion
+    (17) asignacion -> . ID EQ expresion
+    (22) sentencia_if -> . KW_IF expresion_booleana PUNTOPUNTO bloque
+    (23) sentencia_if -> . KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque
+    (24) sentencia_while -> . KW_WHILE expresion_booleana PUNTOPUNTO bloque
+    (34) entrada_salida -> . KW_READ LPARENTESIS ID RPARENTESIS
+    (35) entrada_salida -> . KW_WRITE LPARENTESIS expresion RPARENTESIS
+    (25) funcion -> . KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque
+    (18) tipo -> . KW_INT
+    (19) tipo -> . KW_FLOAT
+    (20) tipo -> . KW_STRING
+    (21) tipo -> . KW_BOOL
+
+    NEWLINE         shift and go to state 6
+    $end            reduce using rule 14 (empty -> .)
+    DEDENT          reduce using rule 14 (empty -> .)
+    error           shift and go to state 13
+    ID              shift and go to state 15
+    KW_IF           shift and go to state 16
+    KW_WHILE        shift and go to state 17
+    KW_READ         shift and go to state 18
+    KW_WRITE        shift and go to state 19
+    KW_FUNC         shift and go to state 20
+    KW_INT          shift and go to state 21
+    KW_FLOAT        shift and go to state 22
+    KW_STRING       shift and go to state 23
+    KW_BOOL         shift and go to state 24
+
+    bloque_sentencia               shift and go to state 3
+    sentencias                     shift and go to state 25
+    empty                          shift and go to state 4
+    sentencia                      shift and go to state 5
+    declaracion_variable           shift and go to state 7
+    asignacion                     shift and go to state 8
+    sentencia_if                   shift and go to state 9
+    sentencia_while                shift and go to state 10
+    entrada_salida                 shift and go to state 11
+    funcion                        shift and go to state 12
+    tipo                           shift and go to state 14
+
+state 4
+
+    (3) sentencias -> empty .
+
+    $end            reduce using rule 3 (sentencias -> empty .)
+    DEDENT          reduce using rule 3 (sentencias -> empty .)
+
+
+state 5
+
+    (4) bloque_sentencia -> sentencia . NEWLINE
+    (5) bloque_sentencia -> sentencia .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    NEWLINE         shift and go to state 26
+    error           reduce using rule 5 (bloque_sentencia -> sentencia .)
+    ID              reduce using rule 5 (bloque_sentencia -> sentencia .)
+    KW_IF           reduce using rule 5 (bloque_sentencia -> sentencia .)
+    KW_WHILE        reduce using rule 5 (bloque_sentencia -> sentencia .)
+    KW_READ         reduce using rule 5 (bloque_sentencia -> sentencia .)
+    KW_WRITE        reduce using rule 5 (bloque_sentencia -> sentencia .)
+    KW_FUNC         reduce using rule 5 (bloque_sentencia -> sentencia .)
+    KW_INT          reduce using rule 5 (bloque_sentencia -> sentencia .)
+    KW_FLOAT        reduce using rule 5 (bloque_sentencia -> sentencia .)
+    KW_STRING       reduce using rule 5 (bloque_sentencia -> sentencia .)
+    KW_BOOL         reduce using rule 5 (bloque_sentencia -> sentencia .)
+    $end            reduce using rule 5 (bloque_sentencia -> sentencia .)
+    DEDENT          reduce using rule 5 (bloque_sentencia -> sentencia .)
+
+  ! NEWLINE         [ reduce using rule 5 (bloque_sentencia -> sentencia .) ]
+
+
+state 6
+
+    (6) bloque_sentencia -> NEWLINE .
+
+    NEWLINE         reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    error           reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    ID              reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    KW_IF           reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    KW_WHILE        reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    KW_READ         reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    KW_WRITE        reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    KW_FUNC         reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    KW_INT          reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    KW_FLOAT        reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    KW_STRING       reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    KW_BOOL         reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    $end            reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+    DEDENT          reduce using rule 6 (bloque_sentencia -> NEWLINE .)
+
+
+state 7
+
+    (7) sentencia -> declaracion_variable .
+
+    NEWLINE         reduce using rule 7 (sentencia -> declaracion_variable .)
+    error           reduce using rule 7 (sentencia -> declaracion_variable .)
+    ID              reduce using rule 7 (sentencia -> declaracion_variable .)
+    KW_IF           reduce using rule 7 (sentencia -> declaracion_variable .)
+    KW_WHILE        reduce using rule 7 (sentencia -> declaracion_variable .)
+    KW_READ         reduce using rule 7 (sentencia -> declaracion_variable .)
+    KW_WRITE        reduce using rule 7 (sentencia -> declaracion_variable .)
+    KW_FUNC         reduce using rule 7 (sentencia -> declaracion_variable .)
+    KW_INT          reduce using rule 7 (sentencia -> declaracion_variable .)
+    KW_FLOAT        reduce using rule 7 (sentencia -> declaracion_variable .)
+    KW_STRING       reduce using rule 7 (sentencia -> declaracion_variable .)
+    KW_BOOL         reduce using rule 7 (sentencia -> declaracion_variable .)
+    $end            reduce using rule 7 (sentencia -> declaracion_variable .)
+    DEDENT          reduce using rule 7 (sentencia -> declaracion_variable .)
+
+
+state 8
+
+    (8) sentencia -> asignacion .
+
+    NEWLINE         reduce using rule 8 (sentencia -> asignacion .)
+    error           reduce using rule 8 (sentencia -> asignacion .)
+    ID              reduce using rule 8 (sentencia -> asignacion .)
+    KW_IF           reduce using rule 8 (sentencia -> asignacion .)
+    KW_WHILE        reduce using rule 8 (sentencia -> asignacion .)
+    KW_READ         reduce using rule 8 (sentencia -> asignacion .)
+    KW_WRITE        reduce using rule 8 (sentencia -> asignacion .)
+    KW_FUNC         reduce using rule 8 (sentencia -> asignacion .)
+    KW_INT          reduce using rule 8 (sentencia -> asignacion .)
+    KW_FLOAT        reduce using rule 8 (sentencia -> asignacion .)
+    KW_STRING       reduce using rule 8 (sentencia -> asignacion .)
+    KW_BOOL         reduce using rule 8 (sentencia -> asignacion .)
+    $end            reduce using rule 8 (sentencia -> asignacion .)
+    DEDENT          reduce using rule 8 (sentencia -> asignacion .)
+
+
+state 9
+
+    (9) sentencia -> sentencia_if .
+
+    NEWLINE         reduce using rule 9 (sentencia -> sentencia_if .)
+    error           reduce using rule 9 (sentencia -> sentencia_if .)
+    ID              reduce using rule 9 (sentencia -> sentencia_if .)
+    KW_IF           reduce using rule 9 (sentencia -> sentencia_if .)
+    KW_WHILE        reduce using rule 9 (sentencia -> sentencia_if .)
+    KW_READ         reduce using rule 9 (sentencia -> sentencia_if .)
+    KW_WRITE        reduce using rule 9 (sentencia -> sentencia_if .)
+    KW_FUNC         reduce using rule 9 (sentencia -> sentencia_if .)
+    KW_INT          reduce using rule 9 (sentencia -> sentencia_if .)
+    KW_FLOAT        reduce using rule 9 (sentencia -> sentencia_if .)
+    KW_STRING       reduce using rule 9 (sentencia -> sentencia_if .)
+    KW_BOOL         reduce using rule 9 (sentencia -> sentencia_if .)
+    $end            reduce using rule 9 (sentencia -> sentencia_if .)
+    DEDENT          reduce using rule 9 (sentencia -> sentencia_if .)
+
+
+state 10
+
+    (10) sentencia -> sentencia_while .
+
+    NEWLINE         reduce using rule 10 (sentencia -> sentencia_while .)
+    error           reduce using rule 10 (sentencia -> sentencia_while .)
+    ID              reduce using rule 10 (sentencia -> sentencia_while .)
+    KW_IF           reduce using rule 10 (sentencia -> sentencia_while .)
+    KW_WHILE        reduce using rule 10 (sentencia -> sentencia_while .)
+    KW_READ         reduce using rule 10 (sentencia -> sentencia_while .)
+    KW_WRITE        reduce using rule 10 (sentencia -> sentencia_while .)
+    KW_FUNC         reduce using rule 10 (sentencia -> sentencia_while .)
+    KW_INT          reduce using rule 10 (sentencia -> sentencia_while .)
+    KW_FLOAT        reduce using rule 10 (sentencia -> sentencia_while .)
+    KW_STRING       reduce using rule 10 (sentencia -> sentencia_while .)
+    KW_BOOL         reduce using rule 10 (sentencia -> sentencia_while .)
+    $end            reduce using rule 10 (sentencia -> sentencia_while .)
+    DEDENT          reduce using rule 10 (sentencia -> sentencia_while .)
+
+
+state 11
+
+    (11) sentencia -> entrada_salida .
+
+    NEWLINE         reduce using rule 11 (sentencia -> entrada_salida .)
+    error           reduce using rule 11 (sentencia -> entrada_salida .)
+    ID              reduce using rule 11 (sentencia -> entrada_salida .)
+    KW_IF           reduce using rule 11 (sentencia -> entrada_salida .)
+    KW_WHILE        reduce using rule 11 (sentencia -> entrada_salida .)
+    KW_READ         reduce using rule 11 (sentencia -> entrada_salida .)
+    KW_WRITE        reduce using rule 11 (sentencia -> entrada_salida .)
+    KW_FUNC         reduce using rule 11 (sentencia -> entrada_salida .)
+    KW_INT          reduce using rule 11 (sentencia -> entrada_salida .)
+    KW_FLOAT        reduce using rule 11 (sentencia -> entrada_salida .)
+    KW_STRING       reduce using rule 11 (sentencia -> entrada_salida .)
+    KW_BOOL         reduce using rule 11 (sentencia -> entrada_salida .)
+    $end            reduce using rule 11 (sentencia -> entrada_salida .)
+    DEDENT          reduce using rule 11 (sentencia -> entrada_salida .)
+
+
+state 12
+
+    (12) sentencia -> funcion .
+
+    NEWLINE         reduce using rule 12 (sentencia -> funcion .)
+    error           reduce using rule 12 (sentencia -> funcion .)
+    ID              reduce using rule 12 (sentencia -> funcion .)
+    KW_IF           reduce using rule 12 (sentencia -> funcion .)
+    KW_WHILE        reduce using rule 12 (sentencia -> funcion .)
+    KW_READ         reduce using rule 12 (sentencia -> funcion .)
+    KW_WRITE        reduce using rule 12 (sentencia -> funcion .)
+    KW_FUNC         reduce using rule 12 (sentencia -> funcion .)
+    KW_INT          reduce using rule 12 (sentencia -> funcion .)
+    KW_FLOAT        reduce using rule 12 (sentencia -> funcion .)
+    KW_STRING       reduce using rule 12 (sentencia -> funcion .)
+    KW_BOOL         reduce using rule 12 (sentencia -> funcion .)
+    $end            reduce using rule 12 (sentencia -> funcion .)
+    DEDENT          reduce using rule 12 (sentencia -> funcion .)
+
+
+state 13
+
+    (13) sentencia -> error . NEWLINE
+
+    NEWLINE         shift and go to state 27
+
+
+state 14
+
+    (15) declaracion_variable -> tipo . ID
+    (16) declaracion_variable -> tipo . ID EQ expresion
+
+    ID              shift and go to state 28
+
+
+state 15
+
+    (17) asignacion -> ID . EQ expresion
+
+    EQ              shift and go to state 29
+
+
+state 16
+
+    (22) sentencia_if -> KW_IF . expresion_booleana PUNTOPUNTO bloque
+    (23) sentencia_if -> KW_IF . expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque
+    (36) expresion_booleana -> . expresion_booleana AND expresion_booleana
+    (37) expresion_booleana -> . expresion_booleana OR expresion_booleana
+    (38) expresion_booleana -> . NOT expresion_booleana
+    (39) expresion_booleana -> . expresion operador_relacional expresion
+    (40) expresion_booleana -> . BOOL
+    (41) expresion_booleana -> . LPARENTESIS expresion_booleana RPARENTESIS
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    NOT             shift and go to state 31
+    BOOL            shift and go to state 33
+    LPARENTESIS     shift and go to state 34
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+
+    expresion_booleana             shift and go to state 30
+    expresion                      shift and go to state 32
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 17
+
+    (24) sentencia_while -> KW_WHILE . expresion_booleana PUNTOPUNTO bloque
+    (36) expresion_booleana -> . expresion_booleana AND expresion_booleana
+    (37) expresion_booleana -> . expresion_booleana OR expresion_booleana
+    (38) expresion_booleana -> . NOT expresion_booleana
+    (39) expresion_booleana -> . expresion operador_relacional expresion
+    (40) expresion_booleana -> . BOOL
+    (41) expresion_booleana -> . LPARENTESIS expresion_booleana RPARENTESIS
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    NOT             shift and go to state 31
+    BOOL            shift and go to state 33
+    LPARENTESIS     shift and go to state 34
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+
+    expresion_booleana             shift and go to state 41
+    expresion                      shift and go to state 32
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 18
+
+    (34) entrada_salida -> KW_READ . LPARENTESIS ID RPARENTESIS
+
+    LPARENTESIS     shift and go to state 42
+
+
+state 19
+
+    (35) entrada_salida -> KW_WRITE . LPARENTESIS expresion RPARENTESIS
+
+    LPARENTESIS     shift and go to state 43
+
+
+state 20
+
+    (25) funcion -> KW_FUNC . ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque
+
+    ID              shift and go to state 44
+
+
+state 21
+
+    (18) tipo -> KW_INT .
+
+    ID              reduce using rule 18 (tipo -> KW_INT .)
+
+
+state 22
+
+    (19) tipo -> KW_FLOAT .
+
+    ID              reduce using rule 19 (tipo -> KW_FLOAT .)
+
+
+state 23
+
+    (20) tipo -> KW_STRING .
+
+    ID              reduce using rule 20 (tipo -> KW_STRING .)
+
+
+state 24
+
+    (21) tipo -> KW_BOOL .
+
+    ID              reduce using rule 21 (tipo -> KW_BOOL .)
+
+
+state 25
+
+    (2) sentencias -> bloque_sentencia sentencias .
+
+    $end            reduce using rule 2 (sentencias -> bloque_sentencia sentencias .)
+    DEDENT          reduce using rule 2 (sentencias -> bloque_sentencia sentencias .)
+
+
+state 26
+
+    (4) bloque_sentencia -> sentencia NEWLINE .
+
+    NEWLINE         reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    error           reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    ID              reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    KW_IF           reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    KW_WHILE        reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    KW_READ         reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    KW_WRITE        reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    KW_FUNC         reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    KW_INT          reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    KW_FLOAT        reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    KW_STRING       reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    KW_BOOL         reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    $end            reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+    DEDENT          reduce using rule 4 (bloque_sentencia -> sentencia NEWLINE .)
+
+
+state 27
+
+    (13) sentencia -> error NEWLINE .
+
+    NEWLINE         reduce using rule 13 (sentencia -> error NEWLINE .)
+    error           reduce using rule 13 (sentencia -> error NEWLINE .)
+    ID              reduce using rule 13 (sentencia -> error NEWLINE .)
+    KW_IF           reduce using rule 13 (sentencia -> error NEWLINE .)
+    KW_WHILE        reduce using rule 13 (sentencia -> error NEWLINE .)
+    KW_READ         reduce using rule 13 (sentencia -> error NEWLINE .)
+    KW_WRITE        reduce using rule 13 (sentencia -> error NEWLINE .)
+    KW_FUNC         reduce using rule 13 (sentencia -> error NEWLINE .)
+    KW_INT          reduce using rule 13 (sentencia -> error NEWLINE .)
+    KW_FLOAT        reduce using rule 13 (sentencia -> error NEWLINE .)
+    KW_STRING       reduce using rule 13 (sentencia -> error NEWLINE .)
+    KW_BOOL         reduce using rule 13 (sentencia -> error NEWLINE .)
+    $end            reduce using rule 13 (sentencia -> error NEWLINE .)
+    DEDENT          reduce using rule 13 (sentencia -> error NEWLINE .)
+
+
+state 28
+
+    (15) declaracion_variable -> tipo ID .
+    (16) declaracion_variable -> tipo ID . EQ expresion
+
+    NEWLINE         reduce using rule 15 (declaracion_variable -> tipo ID .)
+    error           reduce using rule 15 (declaracion_variable -> tipo ID .)
+    ID              reduce using rule 15 (declaracion_variable -> tipo ID .)
+    KW_IF           reduce using rule 15 (declaracion_variable -> tipo ID .)
+    KW_WHILE        reduce using rule 15 (declaracion_variable -> tipo ID .)
+    KW_READ         reduce using rule 15 (declaracion_variable -> tipo ID .)
+    KW_WRITE        reduce using rule 15 (declaracion_variable -> tipo ID .)
+    KW_FUNC         reduce using rule 15 (declaracion_variable -> tipo ID .)
+    KW_INT          reduce using rule 15 (declaracion_variable -> tipo ID .)
+    KW_FLOAT        reduce using rule 15 (declaracion_variable -> tipo ID .)
+    KW_STRING       reduce using rule 15 (declaracion_variable -> tipo ID .)
+    KW_BOOL         reduce using rule 15 (declaracion_variable -> tipo ID .)
+    $end            reduce using rule 15 (declaracion_variable -> tipo ID .)
+    DEDENT          reduce using rule 15 (declaracion_variable -> tipo ID .)
+    EQ              shift and go to state 45
+
+
+state 29
+
+    (17) asignacion -> ID EQ . expresion
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    expresion                      shift and go to state 46
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 30
+
+    (22) sentencia_if -> KW_IF expresion_booleana . PUNTOPUNTO bloque
+    (23) sentencia_if -> KW_IF expresion_booleana . PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque
+    (36) expresion_booleana -> expresion_booleana . AND expresion_booleana
+    (37) expresion_booleana -> expresion_booleana . OR expresion_booleana
+
+    PUNTOPUNTO      shift and go to state 48
+    AND             shift and go to state 49
+    OR              shift and go to state 50
+
+
+state 31
+
+    (38) expresion_booleana -> NOT . expresion_booleana
+    (36) expresion_booleana -> . expresion_booleana AND expresion_booleana
+    (37) expresion_booleana -> . expresion_booleana OR expresion_booleana
+    (38) expresion_booleana -> . NOT expresion_booleana
+    (39) expresion_booleana -> . expresion operador_relacional expresion
+    (40) expresion_booleana -> . BOOL
+    (41) expresion_booleana -> . LPARENTESIS expresion_booleana RPARENTESIS
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    NOT             shift and go to state 31
+    BOOL            shift and go to state 33
+    LPARENTESIS     shift and go to state 34
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+
+    expresion_booleana             shift and go to state 51
+    expresion                      shift and go to state 32
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 32
+
+    (39) expresion_booleana -> expresion . operador_relacional expresion
+    (48) expresion -> expresion . PLUS termino
+    (49) expresion -> expresion . MINUS termino
+    (42) operador_relacional -> . LT
+    (43) operador_relacional -> . GT
+    (44) operador_relacional -> . LE
+    (45) operador_relacional -> . GE
+    (46) operador_relacional -> . EQEQ
+    (47) operador_relacional -> . NE
+
+    PLUS            shift and go to state 53
+    MINUS           shift and go to state 54
+    LT              shift and go to state 55
+    GT              shift and go to state 56
+    LE              shift and go to state 57
+    GE              shift and go to state 58
+    EQEQ            shift and go to state 59
+    NE              shift and go to state 60
+
+    operador_relacional            shift and go to state 52
+
+state 33
+
+    (40) expresion_booleana -> BOOL .
+
+    PUNTOPUNTO      reduce using rule 40 (expresion_booleana -> BOOL .)
+    AND             reduce using rule 40 (expresion_booleana -> BOOL .)
+    OR              reduce using rule 40 (expresion_booleana -> BOOL .)
+    RPARENTESIS     reduce using rule 40 (expresion_booleana -> BOOL .)
+
+
+state 34
+
+    (41) expresion_booleana -> LPARENTESIS . expresion_booleana RPARENTESIS
+    (59) factor -> LPARENTESIS . expresion RPARENTESIS
+    (36) expresion_booleana -> . expresion_booleana AND expresion_booleana
+    (37) expresion_booleana -> . expresion_booleana OR expresion_booleana
+    (38) expresion_booleana -> . NOT expresion_booleana
+    (39) expresion_booleana -> . expresion operador_relacional expresion
+    (40) expresion_booleana -> . BOOL
+    (41) expresion_booleana -> . LPARENTESIS expresion_booleana RPARENTESIS
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    NOT             shift and go to state 31
+    BOOL            shift and go to state 33
+    LPARENTESIS     shift and go to state 34
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+
+    expresion_booleana             shift and go to state 61
+    expresion                      shift and go to state 62
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 35
+
+    (50) expresion -> termino .
+    (51) termino -> termino . STAR factor
+    (52) termino -> termino . SLASH factor
+    (53) termino -> termino . MOD factor
+
+    PLUS            reduce using rule 50 (expresion -> termino .)
+    MINUS           reduce using rule 50 (expresion -> termino .)
+    LT              reduce using rule 50 (expresion -> termino .)
+    GT              reduce using rule 50 (expresion -> termino .)
+    LE              reduce using rule 50 (expresion -> termino .)
+    GE              reduce using rule 50 (expresion -> termino .)
+    EQEQ            reduce using rule 50 (expresion -> termino .)
+    NE              reduce using rule 50 (expresion -> termino .)
+    NEWLINE         reduce using rule 50 (expresion -> termino .)
+    error           reduce using rule 50 (expresion -> termino .)
+    ID              reduce using rule 50 (expresion -> termino .)
+    KW_IF           reduce using rule 50 (expresion -> termino .)
+    KW_WHILE        reduce using rule 50 (expresion -> termino .)
+    KW_READ         reduce using rule 50 (expresion -> termino .)
+    KW_WRITE        reduce using rule 50 (expresion -> termino .)
+    KW_FUNC         reduce using rule 50 (expresion -> termino .)
+    KW_INT          reduce using rule 50 (expresion -> termino .)
+    KW_FLOAT        reduce using rule 50 (expresion -> termino .)
+    KW_STRING       reduce using rule 50 (expresion -> termino .)
+    KW_BOOL         reduce using rule 50 (expresion -> termino .)
+    $end            reduce using rule 50 (expresion -> termino .)
+    DEDENT          reduce using rule 50 (expresion -> termino .)
+    RPARENTESIS     reduce using rule 50 (expresion -> termino .)
+    PUNTOPUNTO      reduce using rule 50 (expresion -> termino .)
+    AND             reduce using rule 50 (expresion -> termino .)
+    OR              reduce using rule 50 (expresion -> termino .)
+    COMA            reduce using rule 50 (expresion -> termino .)
+    STAR            shift and go to state 63
+    SLASH           shift and go to state 64
+    MOD             shift and go to state 65
+
+
+state 36
+
+    (54) termino -> factor .
+
+    STAR            reduce using rule 54 (termino -> factor .)
+    SLASH           reduce using rule 54 (termino -> factor .)
+    MOD             reduce using rule 54 (termino -> factor .)
+    PLUS            reduce using rule 54 (termino -> factor .)
+    MINUS           reduce using rule 54 (termino -> factor .)
+    LT              reduce using rule 54 (termino -> factor .)
+    GT              reduce using rule 54 (termino -> factor .)
+    LE              reduce using rule 54 (termino -> factor .)
+    GE              reduce using rule 54 (termino -> factor .)
+    EQEQ            reduce using rule 54 (termino -> factor .)
+    NE              reduce using rule 54 (termino -> factor .)
+    NEWLINE         reduce using rule 54 (termino -> factor .)
+    error           reduce using rule 54 (termino -> factor .)
+    ID              reduce using rule 54 (termino -> factor .)
+    KW_IF           reduce using rule 54 (termino -> factor .)
+    KW_WHILE        reduce using rule 54 (termino -> factor .)
+    KW_READ         reduce using rule 54 (termino -> factor .)
+    KW_WRITE        reduce using rule 54 (termino -> factor .)
+    KW_FUNC         reduce using rule 54 (termino -> factor .)
+    KW_INT          reduce using rule 54 (termino -> factor .)
+    KW_FLOAT        reduce using rule 54 (termino -> factor .)
+    KW_STRING       reduce using rule 54 (termino -> factor .)
+    KW_BOOL         reduce using rule 54 (termino -> factor .)
+    $end            reduce using rule 54 (termino -> factor .)
+    DEDENT          reduce using rule 54 (termino -> factor .)
+    RPARENTESIS     reduce using rule 54 (termino -> factor .)
+    PUNTOPUNTO      reduce using rule 54 (termino -> factor .)
+    AND             reduce using rule 54 (termino -> factor .)
+    OR              reduce using rule 54 (termino -> factor .)
+    COMA            reduce using rule 54 (termino -> factor .)
+
+
+state 37
+
+    (55) factor -> ID .
+    (60) factor -> ID . LPARENTESIS argumentos RPARENTESIS
+
+    STAR            reduce using rule 55 (factor -> ID .)
+    SLASH           reduce using rule 55 (factor -> ID .)
+    MOD             reduce using rule 55 (factor -> ID .)
+    PLUS            reduce using rule 55 (factor -> ID .)
+    MINUS           reduce using rule 55 (factor -> ID .)
+    LT              reduce using rule 55 (factor -> ID .)
+    GT              reduce using rule 55 (factor -> ID .)
+    LE              reduce using rule 55 (factor -> ID .)
+    GE              reduce using rule 55 (factor -> ID .)
+    EQEQ            reduce using rule 55 (factor -> ID .)
+    NE              reduce using rule 55 (factor -> ID .)
+    NEWLINE         reduce using rule 55 (factor -> ID .)
+    error           reduce using rule 55 (factor -> ID .)
+    ID              reduce using rule 55 (factor -> ID .)
+    KW_IF           reduce using rule 55 (factor -> ID .)
+    KW_WHILE        reduce using rule 55 (factor -> ID .)
+    KW_READ         reduce using rule 55 (factor -> ID .)
+    KW_WRITE        reduce using rule 55 (factor -> ID .)
+    KW_FUNC         reduce using rule 55 (factor -> ID .)
+    KW_INT          reduce using rule 55 (factor -> ID .)
+    KW_FLOAT        reduce using rule 55 (factor -> ID .)
+    KW_STRING       reduce using rule 55 (factor -> ID .)
+    KW_BOOL         reduce using rule 55 (factor -> ID .)
+    $end            reduce using rule 55 (factor -> ID .)
+    DEDENT          reduce using rule 55 (factor -> ID .)
+    RPARENTESIS     reduce using rule 55 (factor -> ID .)
+    PUNTOPUNTO      reduce using rule 55 (factor -> ID .)
+    AND             reduce using rule 55 (factor -> ID .)
+    OR              reduce using rule 55 (factor -> ID .)
+    COMA            reduce using rule 55 (factor -> ID .)
+    LPARENTESIS     shift and go to state 66
+
+
+state 38
+
+    (56) factor -> ENTERO .
+
+    STAR            reduce using rule 56 (factor -> ENTERO .)
+    SLASH           reduce using rule 56 (factor -> ENTERO .)
+    MOD             reduce using rule 56 (factor -> ENTERO .)
+    PLUS            reduce using rule 56 (factor -> ENTERO .)
+    MINUS           reduce using rule 56 (factor -> ENTERO .)
+    LT              reduce using rule 56 (factor -> ENTERO .)
+    GT              reduce using rule 56 (factor -> ENTERO .)
+    LE              reduce using rule 56 (factor -> ENTERO .)
+    GE              reduce using rule 56 (factor -> ENTERO .)
+    EQEQ            reduce using rule 56 (factor -> ENTERO .)
+    NE              reduce using rule 56 (factor -> ENTERO .)
+    NEWLINE         reduce using rule 56 (factor -> ENTERO .)
+    error           reduce using rule 56 (factor -> ENTERO .)
+    ID              reduce using rule 56 (factor -> ENTERO .)
+    KW_IF           reduce using rule 56 (factor -> ENTERO .)
+    KW_WHILE        reduce using rule 56 (factor -> ENTERO .)
+    KW_READ         reduce using rule 56 (factor -> ENTERO .)
+    KW_WRITE        reduce using rule 56 (factor -> ENTERO .)
+    KW_FUNC         reduce using rule 56 (factor -> ENTERO .)
+    KW_INT          reduce using rule 56 (factor -> ENTERO .)
+    KW_FLOAT        reduce using rule 56 (factor -> ENTERO .)
+    KW_STRING       reduce using rule 56 (factor -> ENTERO .)
+    KW_BOOL         reduce using rule 56 (factor -> ENTERO .)
+    $end            reduce using rule 56 (factor -> ENTERO .)
+    DEDENT          reduce using rule 56 (factor -> ENTERO .)
+    RPARENTESIS     reduce using rule 56 (factor -> ENTERO .)
+    PUNTOPUNTO      reduce using rule 56 (factor -> ENTERO .)
+    AND             reduce using rule 56 (factor -> ENTERO .)
+    OR              reduce using rule 56 (factor -> ENTERO .)
+    COMA            reduce using rule 56 (factor -> ENTERO .)
+
+
+state 39
+
+    (57) factor -> FLOTANTE .
+
+    STAR            reduce using rule 57 (factor -> FLOTANTE .)
+    SLASH           reduce using rule 57 (factor -> FLOTANTE .)
+    MOD             reduce using rule 57 (factor -> FLOTANTE .)
+    PLUS            reduce using rule 57 (factor -> FLOTANTE .)
+    MINUS           reduce using rule 57 (factor -> FLOTANTE .)
+    LT              reduce using rule 57 (factor -> FLOTANTE .)
+    GT              reduce using rule 57 (factor -> FLOTANTE .)
+    LE              reduce using rule 57 (factor -> FLOTANTE .)
+    GE              reduce using rule 57 (factor -> FLOTANTE .)
+    EQEQ            reduce using rule 57 (factor -> FLOTANTE .)
+    NE              reduce using rule 57 (factor -> FLOTANTE .)
+    NEWLINE         reduce using rule 57 (factor -> FLOTANTE .)
+    error           reduce using rule 57 (factor -> FLOTANTE .)
+    ID              reduce using rule 57 (factor -> FLOTANTE .)
+    KW_IF           reduce using rule 57 (factor -> FLOTANTE .)
+    KW_WHILE        reduce using rule 57 (factor -> FLOTANTE .)
+    KW_READ         reduce using rule 57 (factor -> FLOTANTE .)
+    KW_WRITE        reduce using rule 57 (factor -> FLOTANTE .)
+    KW_FUNC         reduce using rule 57 (factor -> FLOTANTE .)
+    KW_INT          reduce using rule 57 (factor -> FLOTANTE .)
+    KW_FLOAT        reduce using rule 57 (factor -> FLOTANTE .)
+    KW_STRING       reduce using rule 57 (factor -> FLOTANTE .)
+    KW_BOOL         reduce using rule 57 (factor -> FLOTANTE .)
+    $end            reduce using rule 57 (factor -> FLOTANTE .)
+    DEDENT          reduce using rule 57 (factor -> FLOTANTE .)
+    RPARENTESIS     reduce using rule 57 (factor -> FLOTANTE .)
+    PUNTOPUNTO      reduce using rule 57 (factor -> FLOTANTE .)
+    AND             reduce using rule 57 (factor -> FLOTANTE .)
+    OR              reduce using rule 57 (factor -> FLOTANTE .)
+    COMA            reduce using rule 57 (factor -> FLOTANTE .)
+
+
+state 40
+
+    (58) factor -> CADENA .
+
+    STAR            reduce using rule 58 (factor -> CADENA .)
+    SLASH           reduce using rule 58 (factor -> CADENA .)
+    MOD             reduce using rule 58 (factor -> CADENA .)
+    PLUS            reduce using rule 58 (factor -> CADENA .)
+    MINUS           reduce using rule 58 (factor -> CADENA .)
+    LT              reduce using rule 58 (factor -> CADENA .)
+    GT              reduce using rule 58 (factor -> CADENA .)
+    LE              reduce using rule 58 (factor -> CADENA .)
+    GE              reduce using rule 58 (factor -> CADENA .)
+    EQEQ            reduce using rule 58 (factor -> CADENA .)
+    NE              reduce using rule 58 (factor -> CADENA .)
+    NEWLINE         reduce using rule 58 (factor -> CADENA .)
+    error           reduce using rule 58 (factor -> CADENA .)
+    ID              reduce using rule 58 (factor -> CADENA .)
+    KW_IF           reduce using rule 58 (factor -> CADENA .)
+    KW_WHILE        reduce using rule 58 (factor -> CADENA .)
+    KW_READ         reduce using rule 58 (factor -> CADENA .)
+    KW_WRITE        reduce using rule 58 (factor -> CADENA .)
+    KW_FUNC         reduce using rule 58 (factor -> CADENA .)
+    KW_INT          reduce using rule 58 (factor -> CADENA .)
+    KW_FLOAT        reduce using rule 58 (factor -> CADENA .)
+    KW_STRING       reduce using rule 58 (factor -> CADENA .)
+    KW_BOOL         reduce using rule 58 (factor -> CADENA .)
+    $end            reduce using rule 58 (factor -> CADENA .)
+    DEDENT          reduce using rule 58 (factor -> CADENA .)
+    RPARENTESIS     reduce using rule 58 (factor -> CADENA .)
+    PUNTOPUNTO      reduce using rule 58 (factor -> CADENA .)
+    AND             reduce using rule 58 (factor -> CADENA .)
+    OR              reduce using rule 58 (factor -> CADENA .)
+    COMA            reduce using rule 58 (factor -> CADENA .)
+
+
+state 41
+
+    (24) sentencia_while -> KW_WHILE expresion_booleana . PUNTOPUNTO bloque
+    (36) expresion_booleana -> expresion_booleana . AND expresion_booleana
+    (37) expresion_booleana -> expresion_booleana . OR expresion_booleana
+
+    PUNTOPUNTO      shift and go to state 67
+    AND             shift and go to state 49
+    OR              shift and go to state 50
+
+
+state 42
+
+    (34) entrada_salida -> KW_READ LPARENTESIS . ID RPARENTESIS
+
+    ID              shift and go to state 68
+
+
+state 43
+
+    (35) entrada_salida -> KW_WRITE LPARENTESIS . expresion RPARENTESIS
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    expresion                      shift and go to state 69
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 44
+
+    (25) funcion -> KW_FUNC ID . LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque
+
+    LPARENTESIS     shift and go to state 70
+
+
+state 45
+
+    (16) declaracion_variable -> tipo ID EQ . expresion
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    expresion                      shift and go to state 71
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 46
+
+    (17) asignacion -> ID EQ expresion .
+    (48) expresion -> expresion . PLUS termino
+    (49) expresion -> expresion . MINUS termino
+
+    NEWLINE         reduce using rule 17 (asignacion -> ID EQ expresion .)
+    error           reduce using rule 17 (asignacion -> ID EQ expresion .)
+    ID              reduce using rule 17 (asignacion -> ID EQ expresion .)
+    KW_IF           reduce using rule 17 (asignacion -> ID EQ expresion .)
+    KW_WHILE        reduce using rule 17 (asignacion -> ID EQ expresion .)
+    KW_READ         reduce using rule 17 (asignacion -> ID EQ expresion .)
+    KW_WRITE        reduce using rule 17 (asignacion -> ID EQ expresion .)
+    KW_FUNC         reduce using rule 17 (asignacion -> ID EQ expresion .)
+    KW_INT          reduce using rule 17 (asignacion -> ID EQ expresion .)
+    KW_FLOAT        reduce using rule 17 (asignacion -> ID EQ expresion .)
+    KW_STRING       reduce using rule 17 (asignacion -> ID EQ expresion .)
+    KW_BOOL         reduce using rule 17 (asignacion -> ID EQ expresion .)
+    $end            reduce using rule 17 (asignacion -> ID EQ expresion .)
+    DEDENT          reduce using rule 17 (asignacion -> ID EQ expresion .)
+    PLUS            shift and go to state 53
+    MINUS           shift and go to state 54
+
+
+state 47
+
+    (59) factor -> LPARENTESIS . expresion RPARENTESIS
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    expresion                      shift and go to state 72
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 48
+
+    (22) sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO . bloque
+    (23) sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO . bloque KW_ELSE PUNTOPUNTO bloque
+    (32) bloque -> . NEWLINE INDENT sentencias DEDENT
+    (33) bloque -> . INDENT sentencias DEDENT
+
+    NEWLINE         shift and go to state 74
+    INDENT          shift and go to state 75
+
+    bloque                         shift and go to state 73
+
+state 49
+
+    (36) expresion_booleana -> expresion_booleana AND . expresion_booleana
+    (36) expresion_booleana -> . expresion_booleana AND expresion_booleana
+    (37) expresion_booleana -> . expresion_booleana OR expresion_booleana
+    (38) expresion_booleana -> . NOT expresion_booleana
+    (39) expresion_booleana -> . expresion operador_relacional expresion
+    (40) expresion_booleana -> . BOOL
+    (41) expresion_booleana -> . LPARENTESIS expresion_booleana RPARENTESIS
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    NOT             shift and go to state 31
+    BOOL            shift and go to state 33
+    LPARENTESIS     shift and go to state 34
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+
+    expresion_booleana             shift and go to state 76
+    expresion                      shift and go to state 32
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 50
+
+    (37) expresion_booleana -> expresion_booleana OR . expresion_booleana
+    (36) expresion_booleana -> . expresion_booleana AND expresion_booleana
+    (37) expresion_booleana -> . expresion_booleana OR expresion_booleana
+    (38) expresion_booleana -> . NOT expresion_booleana
+    (39) expresion_booleana -> . expresion operador_relacional expresion
+    (40) expresion_booleana -> . BOOL
+    (41) expresion_booleana -> . LPARENTESIS expresion_booleana RPARENTESIS
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    NOT             shift and go to state 31
+    BOOL            shift and go to state 33
+    LPARENTESIS     shift and go to state 34
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+
+    expresion_booleana             shift and go to state 77
+    expresion                      shift and go to state 32
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 51
+
+    (38) expresion_booleana -> NOT expresion_booleana .
+    (36) expresion_booleana -> expresion_booleana . AND expresion_booleana
+    (37) expresion_booleana -> expresion_booleana . OR expresion_booleana
+
+    PUNTOPUNTO      reduce using rule 38 (expresion_booleana -> NOT expresion_booleana .)
+    AND             reduce using rule 38 (expresion_booleana -> NOT expresion_booleana .)
+    OR              reduce using rule 38 (expresion_booleana -> NOT expresion_booleana .)
+    RPARENTESIS     reduce using rule 38 (expresion_booleana -> NOT expresion_booleana .)
+
+  ! AND             [ shift and go to state 49 ]
+  ! OR              [ shift and go to state 50 ]
+
+
+state 52
+
+    (39) expresion_booleana -> expresion operador_relacional . expresion
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    expresion                      shift and go to state 78
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 53
+
+    (48) expresion -> expresion PLUS . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    termino                        shift and go to state 79
+    factor                         shift and go to state 36
+
+state 54
+
+    (49) expresion -> expresion MINUS . termino
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    termino                        shift and go to state 80
+    factor                         shift and go to state 36
+
+state 55
+
+    (42) operador_relacional -> LT .
+
+    ID              reduce using rule 42 (operador_relacional -> LT .)
+    ENTERO          reduce using rule 42 (operador_relacional -> LT .)
+    FLOTANTE        reduce using rule 42 (operador_relacional -> LT .)
+    CADENA          reduce using rule 42 (operador_relacional -> LT .)
+    LPARENTESIS     reduce using rule 42 (operador_relacional -> LT .)
+
+
+state 56
+
+    (43) operador_relacional -> GT .
+
+    ID              reduce using rule 43 (operador_relacional -> GT .)
+    ENTERO          reduce using rule 43 (operador_relacional -> GT .)
+    FLOTANTE        reduce using rule 43 (operador_relacional -> GT .)
+    CADENA          reduce using rule 43 (operador_relacional -> GT .)
+    LPARENTESIS     reduce using rule 43 (operador_relacional -> GT .)
+
+
+state 57
+
+    (44) operador_relacional -> LE .
+
+    ID              reduce using rule 44 (operador_relacional -> LE .)
+    ENTERO          reduce using rule 44 (operador_relacional -> LE .)
+    FLOTANTE        reduce using rule 44 (operador_relacional -> LE .)
+    CADENA          reduce using rule 44 (operador_relacional -> LE .)
+    LPARENTESIS     reduce using rule 44 (operador_relacional -> LE .)
+
+
+state 58
+
+    (45) operador_relacional -> GE .
+
+    ID              reduce using rule 45 (operador_relacional -> GE .)
+    ENTERO          reduce using rule 45 (operador_relacional -> GE .)
+    FLOTANTE        reduce using rule 45 (operador_relacional -> GE .)
+    CADENA          reduce using rule 45 (operador_relacional -> GE .)
+    LPARENTESIS     reduce using rule 45 (operador_relacional -> GE .)
+
+
+state 59
+
+    (46) operador_relacional -> EQEQ .
+
+    ID              reduce using rule 46 (operador_relacional -> EQEQ .)
+    ENTERO          reduce using rule 46 (operador_relacional -> EQEQ .)
+    FLOTANTE        reduce using rule 46 (operador_relacional -> EQEQ .)
+    CADENA          reduce using rule 46 (operador_relacional -> EQEQ .)
+    LPARENTESIS     reduce using rule 46 (operador_relacional -> EQEQ .)
+
+
+state 60
+
+    (47) operador_relacional -> NE .
+
+    ID              reduce using rule 47 (operador_relacional -> NE .)
+    ENTERO          reduce using rule 47 (operador_relacional -> NE .)
+    FLOTANTE        reduce using rule 47 (operador_relacional -> NE .)
+    CADENA          reduce using rule 47 (operador_relacional -> NE .)
+    LPARENTESIS     reduce using rule 47 (operador_relacional -> NE .)
+
+
+state 61
+
+    (41) expresion_booleana -> LPARENTESIS expresion_booleana . RPARENTESIS
+    (36) expresion_booleana -> expresion_booleana . AND expresion_booleana
+    (37) expresion_booleana -> expresion_booleana . OR expresion_booleana
+
+    RPARENTESIS     shift and go to state 81
+    AND             shift and go to state 49
+    OR              shift and go to state 50
+
+
+state 62
+
+    (59) factor -> LPARENTESIS expresion . RPARENTESIS
+    (39) expresion_booleana -> expresion . operador_relacional expresion
+    (48) expresion -> expresion . PLUS termino
+    (49) expresion -> expresion . MINUS termino
+    (42) operador_relacional -> . LT
+    (43) operador_relacional -> . GT
+    (44) operador_relacional -> . LE
+    (45) operador_relacional -> . GE
+    (46) operador_relacional -> . EQEQ
+    (47) operador_relacional -> . NE
+
+    RPARENTESIS     shift and go to state 82
+    PLUS            shift and go to state 53
+    MINUS           shift and go to state 54
+    LT              shift and go to state 55
+    GT              shift and go to state 56
+    LE              shift and go to state 57
+    GE              shift and go to state 58
+    EQEQ            shift and go to state 59
+    NE              shift and go to state 60
+
+    operador_relacional            shift and go to state 52
+
+state 63
+
+    (51) termino -> termino STAR . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    factor                         shift and go to state 83
+
+state 64
+
+    (52) termino -> termino SLASH . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    factor                         shift and go to state 84
+
+state 65
+
+    (53) termino -> termino MOD . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    factor                         shift and go to state 85
+
+state 66
+
+    (60) factor -> ID LPARENTESIS . argumentos RPARENTESIS
+    (29) argumentos -> . expresion
+    (30) argumentos -> . expresion COMA argumentos
+    (31) argumentos -> . empty
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (14) empty -> .
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    RPARENTESIS     reduce using rule 14 (empty -> .)
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    argumentos                     shift and go to state 86
+    expresion                      shift and go to state 87
+    empty                          shift and go to state 88
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 67
+
+    (24) sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO . bloque
+    (32) bloque -> . NEWLINE INDENT sentencias DEDENT
+    (33) bloque -> . INDENT sentencias DEDENT
+
+    NEWLINE         shift and go to state 74
+    INDENT          shift and go to state 75
+
+    bloque                         shift and go to state 89
+
+state 68
+
+    (34) entrada_salida -> KW_READ LPARENTESIS ID . RPARENTESIS
+
+    RPARENTESIS     shift and go to state 90
+
+
+state 69
+
+    (35) entrada_salida -> KW_WRITE LPARENTESIS expresion . RPARENTESIS
+    (48) expresion -> expresion . PLUS termino
+    (49) expresion -> expresion . MINUS termino
+
+    RPARENTESIS     shift and go to state 91
+    PLUS            shift and go to state 53
+    MINUS           shift and go to state 54
+
+
+state 70
+
+    (25) funcion -> KW_FUNC ID LPARENTESIS . parametros RPARENTESIS PUNTOPUNTO bloque
+    (26) parametros -> . tipo ID
+    (27) parametros -> . tipo ID COMA parametros
+    (28) parametros -> . empty
+    (18) tipo -> . KW_INT
+    (19) tipo -> . KW_FLOAT
+    (20) tipo -> . KW_STRING
+    (21) tipo -> . KW_BOOL
+    (14) empty -> .
+
+    KW_INT          shift and go to state 21
+    KW_FLOAT        shift and go to state 22
+    KW_STRING       shift and go to state 23
+    KW_BOOL         shift and go to state 24
+    RPARENTESIS     reduce using rule 14 (empty -> .)
+
+    parametros                     shift and go to state 92
+    tipo                           shift and go to state 93
+    empty                          shift and go to state 94
+
+state 71
+
+    (16) declaracion_variable -> tipo ID EQ expresion .
+    (48) expresion -> expresion . PLUS termino
+    (49) expresion -> expresion . MINUS termino
+
+    NEWLINE         reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    error           reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    ID              reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    KW_IF           reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    KW_WHILE        reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    KW_READ         reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    KW_WRITE        reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    KW_FUNC         reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    KW_INT          reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    KW_FLOAT        reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    KW_STRING       reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    KW_BOOL         reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    $end            reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    DEDENT          reduce using rule 16 (declaracion_variable -> tipo ID EQ expresion .)
+    PLUS            shift and go to state 53
+    MINUS           shift and go to state 54
+
+
+state 72
+
+    (59) factor -> LPARENTESIS expresion . RPARENTESIS
+    (48) expresion -> expresion . PLUS termino
+    (49) expresion -> expresion . MINUS termino
+
+    RPARENTESIS     shift and go to state 82
+    PLUS            shift and go to state 53
+    MINUS           shift and go to state 54
+
+
+state 73
+
+    (22) sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .
+    (23) sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque . KW_ELSE PUNTOPUNTO bloque
+
+    NEWLINE         reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    error           reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    ID              reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    KW_IF           reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    KW_WHILE        reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    KW_READ         reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    KW_WRITE        reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    KW_FUNC         reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    KW_INT          reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    KW_FLOAT        reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    KW_STRING       reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    KW_BOOL         reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    $end            reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    DEDENT          reduce using rule 22 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque .)
+    KW_ELSE         shift and go to state 95
+
+
+state 74
+
+    (32) bloque -> NEWLINE . INDENT sentencias DEDENT
+
+    INDENT          shift and go to state 96
+
+
+state 75
+
+    (33) bloque -> INDENT . sentencias DEDENT
+    (2) sentencias -> . bloque_sentencia sentencias
+    (3) sentencias -> . empty
+    (4) bloque_sentencia -> . sentencia NEWLINE
+    (5) bloque_sentencia -> . sentencia
+    (6) bloque_sentencia -> . NEWLINE
+    (14) empty -> .
+    (7) sentencia -> . declaracion_variable
+    (8) sentencia -> . asignacion
+    (9) sentencia -> . sentencia_if
+    (10) sentencia -> . sentencia_while
+    (11) sentencia -> . entrada_salida
+    (12) sentencia -> . funcion
+    (13) sentencia -> . error NEWLINE
+    (15) declaracion_variable -> . tipo ID
+    (16) declaracion_variable -> . tipo ID EQ expresion
+    (17) asignacion -> . ID EQ expresion
+    (22) sentencia_if -> . KW_IF expresion_booleana PUNTOPUNTO bloque
+    (23) sentencia_if -> . KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque
+    (24) sentencia_while -> . KW_WHILE expresion_booleana PUNTOPUNTO bloque
+    (34) entrada_salida -> . KW_READ LPARENTESIS ID RPARENTESIS
+    (35) entrada_salida -> . KW_WRITE LPARENTESIS expresion RPARENTESIS
+    (25) funcion -> . KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque
+    (18) tipo -> . KW_INT
+    (19) tipo -> . KW_FLOAT
+    (20) tipo -> . KW_STRING
+    (21) tipo -> . KW_BOOL
+
+    NEWLINE         shift and go to state 6
+    DEDENT          reduce using rule 14 (empty -> .)
+    error           shift and go to state 13
+    ID              shift and go to state 15
+    KW_IF           shift and go to state 16
+    KW_WHILE        shift and go to state 17
+    KW_READ         shift and go to state 18
+    KW_WRITE        shift and go to state 19
+    KW_FUNC         shift and go to state 20
+    KW_INT          shift and go to state 21
+    KW_FLOAT        shift and go to state 22
+    KW_STRING       shift and go to state 23
+    KW_BOOL         shift and go to state 24
+
+    sentencias                     shift and go to state 97
+    bloque_sentencia               shift and go to state 3
+    empty                          shift and go to state 4
+    sentencia                      shift and go to state 5
+    declaracion_variable           shift and go to state 7
+    asignacion                     shift and go to state 8
+    sentencia_if                   shift and go to state 9
+    sentencia_while                shift and go to state 10
+    entrada_salida                 shift and go to state 11
+    funcion                        shift and go to state 12
+    tipo                           shift and go to state 14
+
+state 76
+
+    (36) expresion_booleana -> expresion_booleana AND expresion_booleana .
+    (36) expresion_booleana -> expresion_booleana . AND expresion_booleana
+    (37) expresion_booleana -> expresion_booleana . OR expresion_booleana
+
+    PUNTOPUNTO      reduce using rule 36 (expresion_booleana -> expresion_booleana AND expresion_booleana .)
+    AND             reduce using rule 36 (expresion_booleana -> expresion_booleana AND expresion_booleana .)
+    OR              reduce using rule 36 (expresion_booleana -> expresion_booleana AND expresion_booleana .)
+    RPARENTESIS     reduce using rule 36 (expresion_booleana -> expresion_booleana AND expresion_booleana .)
+
+  ! AND             [ shift and go to state 49 ]
+  ! OR              [ shift and go to state 50 ]
+
+
+state 77
+
+    (37) expresion_booleana -> expresion_booleana OR expresion_booleana .
+    (36) expresion_booleana -> expresion_booleana . AND expresion_booleana
+    (37) expresion_booleana -> expresion_booleana . OR expresion_booleana
+
+    PUNTOPUNTO      reduce using rule 37 (expresion_booleana -> expresion_booleana OR expresion_booleana .)
+    OR              reduce using rule 37 (expresion_booleana -> expresion_booleana OR expresion_booleana .)
+    RPARENTESIS     reduce using rule 37 (expresion_booleana -> expresion_booleana OR expresion_booleana .)
+    AND             shift and go to state 49
+
+  ! AND             [ reduce using rule 37 (expresion_booleana -> expresion_booleana OR expresion_booleana .) ]
+  ! OR              [ shift and go to state 50 ]
+
+
+state 78
+
+    (39) expresion_booleana -> expresion operador_relacional expresion .
+    (48) expresion -> expresion . PLUS termino
+    (49) expresion -> expresion . MINUS termino
+
+    PUNTOPUNTO      reduce using rule 39 (expresion_booleana -> expresion operador_relacional expresion .)
+    AND             reduce using rule 39 (expresion_booleana -> expresion operador_relacional expresion .)
+    OR              reduce using rule 39 (expresion_booleana -> expresion operador_relacional expresion .)
+    RPARENTESIS     reduce using rule 39 (expresion_booleana -> expresion operador_relacional expresion .)
+    PLUS            shift and go to state 53
+    MINUS           shift and go to state 54
+
+
+state 79
+
+    (48) expresion -> expresion PLUS termino .
+    (51) termino -> termino . STAR factor
+    (52) termino -> termino . SLASH factor
+    (53) termino -> termino . MOD factor
+
+    PLUS            reduce using rule 48 (expresion -> expresion PLUS termino .)
+    MINUS           reduce using rule 48 (expresion -> expresion PLUS termino .)
+    LT              reduce using rule 48 (expresion -> expresion PLUS termino .)
+    GT              reduce using rule 48 (expresion -> expresion PLUS termino .)
+    LE              reduce using rule 48 (expresion -> expresion PLUS termino .)
+    GE              reduce using rule 48 (expresion -> expresion PLUS termino .)
+    EQEQ            reduce using rule 48 (expresion -> expresion PLUS termino .)
+    NE              reduce using rule 48 (expresion -> expresion PLUS termino .)
+    NEWLINE         reduce using rule 48 (expresion -> expresion PLUS termino .)
+    error           reduce using rule 48 (expresion -> expresion PLUS termino .)
+    ID              reduce using rule 48 (expresion -> expresion PLUS termino .)
+    KW_IF           reduce using rule 48 (expresion -> expresion PLUS termino .)
+    KW_WHILE        reduce using rule 48 (expresion -> expresion PLUS termino .)
+    KW_READ         reduce using rule 48 (expresion -> expresion PLUS termino .)
+    KW_WRITE        reduce using rule 48 (expresion -> expresion PLUS termino .)
+    KW_FUNC         reduce using rule 48 (expresion -> expresion PLUS termino .)
+    KW_INT          reduce using rule 48 (expresion -> expresion PLUS termino .)
+    KW_FLOAT        reduce using rule 48 (expresion -> expresion PLUS termino .)
+    KW_STRING       reduce using rule 48 (expresion -> expresion PLUS termino .)
+    KW_BOOL         reduce using rule 48 (expresion -> expresion PLUS termino .)
+    $end            reduce using rule 48 (expresion -> expresion PLUS termino .)
+    DEDENT          reduce using rule 48 (expresion -> expresion PLUS termino .)
+    RPARENTESIS     reduce using rule 48 (expresion -> expresion PLUS termino .)
+    PUNTOPUNTO      reduce using rule 48 (expresion -> expresion PLUS termino .)
+    AND             reduce using rule 48 (expresion -> expresion PLUS termino .)
+    OR              reduce using rule 48 (expresion -> expresion PLUS termino .)
+    COMA            reduce using rule 48 (expresion -> expresion PLUS termino .)
+    STAR            shift and go to state 63
+    SLASH           shift and go to state 64
+    MOD             shift and go to state 65
+
+
+state 80
+
+    (49) expresion -> expresion MINUS termino .
+    (51) termino -> termino . STAR factor
+    (52) termino -> termino . SLASH factor
+    (53) termino -> termino . MOD factor
+
+    PLUS            reduce using rule 49 (expresion -> expresion MINUS termino .)
+    MINUS           reduce using rule 49 (expresion -> expresion MINUS termino .)
+    LT              reduce using rule 49 (expresion -> expresion MINUS termino .)
+    GT              reduce using rule 49 (expresion -> expresion MINUS termino .)
+    LE              reduce using rule 49 (expresion -> expresion MINUS termino .)
+    GE              reduce using rule 49 (expresion -> expresion MINUS termino .)
+    EQEQ            reduce using rule 49 (expresion -> expresion MINUS termino .)
+    NE              reduce using rule 49 (expresion -> expresion MINUS termino .)
+    NEWLINE         reduce using rule 49 (expresion -> expresion MINUS termino .)
+    error           reduce using rule 49 (expresion -> expresion MINUS termino .)
+    ID              reduce using rule 49 (expresion -> expresion MINUS termino .)
+    KW_IF           reduce using rule 49 (expresion -> expresion MINUS termino .)
+    KW_WHILE        reduce using rule 49 (expresion -> expresion MINUS termino .)
+    KW_READ         reduce using rule 49 (expresion -> expresion MINUS termino .)
+    KW_WRITE        reduce using rule 49 (expresion -> expresion MINUS termino .)
+    KW_FUNC         reduce using rule 49 (expresion -> expresion MINUS termino .)
+    KW_INT          reduce using rule 49 (expresion -> expresion MINUS termino .)
+    KW_FLOAT        reduce using rule 49 (expresion -> expresion MINUS termino .)
+    KW_STRING       reduce using rule 49 (expresion -> expresion MINUS termino .)
+    KW_BOOL         reduce using rule 49 (expresion -> expresion MINUS termino .)
+    $end            reduce using rule 49 (expresion -> expresion MINUS termino .)
+    DEDENT          reduce using rule 49 (expresion -> expresion MINUS termino .)
+    RPARENTESIS     reduce using rule 49 (expresion -> expresion MINUS termino .)
+    PUNTOPUNTO      reduce using rule 49 (expresion -> expresion MINUS termino .)
+    AND             reduce using rule 49 (expresion -> expresion MINUS termino .)
+    OR              reduce using rule 49 (expresion -> expresion MINUS termino .)
+    COMA            reduce using rule 49 (expresion -> expresion MINUS termino .)
+    STAR            shift and go to state 63
+    SLASH           shift and go to state 64
+    MOD             shift and go to state 65
+
+
+state 81
+
+    (41) expresion_booleana -> LPARENTESIS expresion_booleana RPARENTESIS .
+
+    PUNTOPUNTO      reduce using rule 41 (expresion_booleana -> LPARENTESIS expresion_booleana RPARENTESIS .)
+    AND             reduce using rule 41 (expresion_booleana -> LPARENTESIS expresion_booleana RPARENTESIS .)
+    OR              reduce using rule 41 (expresion_booleana -> LPARENTESIS expresion_booleana RPARENTESIS .)
+    RPARENTESIS     reduce using rule 41 (expresion_booleana -> LPARENTESIS expresion_booleana RPARENTESIS .)
+
+
+state 82
+
+    (59) factor -> LPARENTESIS expresion RPARENTESIS .
+
+    STAR            reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    SLASH           reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    MOD             reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    PLUS            reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    MINUS           reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    LT              reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    GT              reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    LE              reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    GE              reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    EQEQ            reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    NE              reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    NEWLINE         reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    error           reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    ID              reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    KW_IF           reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    KW_WHILE        reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    KW_READ         reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    KW_WRITE        reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    KW_FUNC         reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    KW_INT          reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    KW_FLOAT        reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    KW_STRING       reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    KW_BOOL         reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    $end            reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    DEDENT          reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    RPARENTESIS     reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    PUNTOPUNTO      reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    AND             reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    OR              reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+    COMA            reduce using rule 59 (factor -> LPARENTESIS expresion RPARENTESIS .)
+
+
+state 83
+
+    (51) termino -> termino STAR factor .
+
+    STAR            reduce using rule 51 (termino -> termino STAR factor .)
+    SLASH           reduce using rule 51 (termino -> termino STAR factor .)
+    MOD             reduce using rule 51 (termino -> termino STAR factor .)
+    PLUS            reduce using rule 51 (termino -> termino STAR factor .)
+    MINUS           reduce using rule 51 (termino -> termino STAR factor .)
+    LT              reduce using rule 51 (termino -> termino STAR factor .)
+    GT              reduce using rule 51 (termino -> termino STAR factor .)
+    LE              reduce using rule 51 (termino -> termino STAR factor .)
+    GE              reduce using rule 51 (termino -> termino STAR factor .)
+    EQEQ            reduce using rule 51 (termino -> termino STAR factor .)
+    NE              reduce using rule 51 (termino -> termino STAR factor .)
+    NEWLINE         reduce using rule 51 (termino -> termino STAR factor .)
+    error           reduce using rule 51 (termino -> termino STAR factor .)
+    ID              reduce using rule 51 (termino -> termino STAR factor .)
+    KW_IF           reduce using rule 51 (termino -> termino STAR factor .)
+    KW_WHILE        reduce using rule 51 (termino -> termino STAR factor .)
+    KW_READ         reduce using rule 51 (termino -> termino STAR factor .)
+    KW_WRITE        reduce using rule 51 (termino -> termino STAR factor .)
+    KW_FUNC         reduce using rule 51 (termino -> termino STAR factor .)
+    KW_INT          reduce using rule 51 (termino -> termino STAR factor .)
+    KW_FLOAT        reduce using rule 51 (termino -> termino STAR factor .)
+    KW_STRING       reduce using rule 51 (termino -> termino STAR factor .)
+    KW_BOOL         reduce using rule 51 (termino -> termino STAR factor .)
+    $end            reduce using rule 51 (termino -> termino STAR factor .)
+    DEDENT          reduce using rule 51 (termino -> termino STAR factor .)
+    RPARENTESIS     reduce using rule 51 (termino -> termino STAR factor .)
+    PUNTOPUNTO      reduce using rule 51 (termino -> termino STAR factor .)
+    AND             reduce using rule 51 (termino -> termino STAR factor .)
+    OR              reduce using rule 51 (termino -> termino STAR factor .)
+    COMA            reduce using rule 51 (termino -> termino STAR factor .)
+
+
+state 84
+
+    (52) termino -> termino SLASH factor .
+
+    STAR            reduce using rule 52 (termino -> termino SLASH factor .)
+    SLASH           reduce using rule 52 (termino -> termino SLASH factor .)
+    MOD             reduce using rule 52 (termino -> termino SLASH factor .)
+    PLUS            reduce using rule 52 (termino -> termino SLASH factor .)
+    MINUS           reduce using rule 52 (termino -> termino SLASH factor .)
+    LT              reduce using rule 52 (termino -> termino SLASH factor .)
+    GT              reduce using rule 52 (termino -> termino SLASH factor .)
+    LE              reduce using rule 52 (termino -> termino SLASH factor .)
+    GE              reduce using rule 52 (termino -> termino SLASH factor .)
+    EQEQ            reduce using rule 52 (termino -> termino SLASH factor .)
+    NE              reduce using rule 52 (termino -> termino SLASH factor .)
+    NEWLINE         reduce using rule 52 (termino -> termino SLASH factor .)
+    error           reduce using rule 52 (termino -> termino SLASH factor .)
+    ID              reduce using rule 52 (termino -> termino SLASH factor .)
+    KW_IF           reduce using rule 52 (termino -> termino SLASH factor .)
+    KW_WHILE        reduce using rule 52 (termino -> termino SLASH factor .)
+    KW_READ         reduce using rule 52 (termino -> termino SLASH factor .)
+    KW_WRITE        reduce using rule 52 (termino -> termino SLASH factor .)
+    KW_FUNC         reduce using rule 52 (termino -> termino SLASH factor .)
+    KW_INT          reduce using rule 52 (termino -> termino SLASH factor .)
+    KW_FLOAT        reduce using rule 52 (termino -> termino SLASH factor .)
+    KW_STRING       reduce using rule 52 (termino -> termino SLASH factor .)
+    KW_BOOL         reduce using rule 52 (termino -> termino SLASH factor .)
+    $end            reduce using rule 52 (termino -> termino SLASH factor .)
+    DEDENT          reduce using rule 52 (termino -> termino SLASH factor .)
+    RPARENTESIS     reduce using rule 52 (termino -> termino SLASH factor .)
+    PUNTOPUNTO      reduce using rule 52 (termino -> termino SLASH factor .)
+    AND             reduce using rule 52 (termino -> termino SLASH factor .)
+    OR              reduce using rule 52 (termino -> termino SLASH factor .)
+    COMA            reduce using rule 52 (termino -> termino SLASH factor .)
+
+
+state 85
+
+    (53) termino -> termino MOD factor .
+
+    STAR            reduce using rule 53 (termino -> termino MOD factor .)
+    SLASH           reduce using rule 53 (termino -> termino MOD factor .)
+    MOD             reduce using rule 53 (termino -> termino MOD factor .)
+    PLUS            reduce using rule 53 (termino -> termino MOD factor .)
+    MINUS           reduce using rule 53 (termino -> termino MOD factor .)
+    LT              reduce using rule 53 (termino -> termino MOD factor .)
+    GT              reduce using rule 53 (termino -> termino MOD factor .)
+    LE              reduce using rule 53 (termino -> termino MOD factor .)
+    GE              reduce using rule 53 (termino -> termino MOD factor .)
+    EQEQ            reduce using rule 53 (termino -> termino MOD factor .)
+    NE              reduce using rule 53 (termino -> termino MOD factor .)
+    NEWLINE         reduce using rule 53 (termino -> termino MOD factor .)
+    error           reduce using rule 53 (termino -> termino MOD factor .)
+    ID              reduce using rule 53 (termino -> termino MOD factor .)
+    KW_IF           reduce using rule 53 (termino -> termino MOD factor .)
+    KW_WHILE        reduce using rule 53 (termino -> termino MOD factor .)
+    KW_READ         reduce using rule 53 (termino -> termino MOD factor .)
+    KW_WRITE        reduce using rule 53 (termino -> termino MOD factor .)
+    KW_FUNC         reduce using rule 53 (termino -> termino MOD factor .)
+    KW_INT          reduce using rule 53 (termino -> termino MOD factor .)
+    KW_FLOAT        reduce using rule 53 (termino -> termino MOD factor .)
+    KW_STRING       reduce using rule 53 (termino -> termino MOD factor .)
+    KW_BOOL         reduce using rule 53 (termino -> termino MOD factor .)
+    $end            reduce using rule 53 (termino -> termino MOD factor .)
+    DEDENT          reduce using rule 53 (termino -> termino MOD factor .)
+    RPARENTESIS     reduce using rule 53 (termino -> termino MOD factor .)
+    PUNTOPUNTO      reduce using rule 53 (termino -> termino MOD factor .)
+    AND             reduce using rule 53 (termino -> termino MOD factor .)
+    OR              reduce using rule 53 (termino -> termino MOD factor .)
+    COMA            reduce using rule 53 (termino -> termino MOD factor .)
+
+
+state 86
+
+    (60) factor -> ID LPARENTESIS argumentos . RPARENTESIS
+
+    RPARENTESIS     shift and go to state 98
+
+
+state 87
+
+    (29) argumentos -> expresion .
+    (30) argumentos -> expresion . COMA argumentos
+    (48) expresion -> expresion . PLUS termino
+    (49) expresion -> expresion . MINUS termino
+
+    RPARENTESIS     reduce using rule 29 (argumentos -> expresion .)
+    COMA            shift and go to state 99
+    PLUS            shift and go to state 53
+    MINUS           shift and go to state 54
+
+
+state 88
+
+    (31) argumentos -> empty .
+
+    RPARENTESIS     reduce using rule 31 (argumentos -> empty .)
+
+
+state 89
+
+    (24) sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .
+
+    NEWLINE         reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    error           reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    ID              reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    KW_IF           reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    KW_WHILE        reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    KW_READ         reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    KW_WRITE        reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    KW_FUNC         reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    KW_INT          reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    KW_FLOAT        reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    KW_STRING       reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    KW_BOOL         reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    $end            reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+    DEDENT          reduce using rule 24 (sentencia_while -> KW_WHILE expresion_booleana PUNTOPUNTO bloque .)
+
+
+state 90
+
+    (34) entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .
+
+    NEWLINE         reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    error           reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    ID              reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    KW_IF           reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    KW_WHILE        reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    KW_READ         reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    KW_WRITE        reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    KW_FUNC         reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    KW_INT          reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    KW_FLOAT        reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    KW_STRING       reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    KW_BOOL         reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    $end            reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+    DEDENT          reduce using rule 34 (entrada_salida -> KW_READ LPARENTESIS ID RPARENTESIS .)
+
+
+state 91
+
+    (35) entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .
+
+    NEWLINE         reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    error           reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    ID              reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    KW_IF           reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    KW_WHILE        reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    KW_READ         reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    KW_WRITE        reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    KW_FUNC         reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    KW_INT          reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    KW_FLOAT        reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    KW_STRING       reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    KW_BOOL         reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    $end            reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+    DEDENT          reduce using rule 35 (entrada_salida -> KW_WRITE LPARENTESIS expresion RPARENTESIS .)
+
+
+state 92
+
+    (25) funcion -> KW_FUNC ID LPARENTESIS parametros . RPARENTESIS PUNTOPUNTO bloque
+
+    RPARENTESIS     shift and go to state 100
+
+
+state 93
+
+    (26) parametros -> tipo . ID
+    (27) parametros -> tipo . ID COMA parametros
+
+    ID              shift and go to state 101
+
+
+state 94
+
+    (28) parametros -> empty .
+
+    RPARENTESIS     reduce using rule 28 (parametros -> empty .)
+
+
+state 95
+
+    (23) sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE . PUNTOPUNTO bloque
+
+    PUNTOPUNTO      shift and go to state 102
+
+
+state 96
+
+    (32) bloque -> NEWLINE INDENT . sentencias DEDENT
+    (2) sentencias -> . bloque_sentencia sentencias
+    (3) sentencias -> . empty
+    (4) bloque_sentencia -> . sentencia NEWLINE
+    (5) bloque_sentencia -> . sentencia
+    (6) bloque_sentencia -> . NEWLINE
+    (14) empty -> .
+    (7) sentencia -> . declaracion_variable
+    (8) sentencia -> . asignacion
+    (9) sentencia -> . sentencia_if
+    (10) sentencia -> . sentencia_while
+    (11) sentencia -> . entrada_salida
+    (12) sentencia -> . funcion
+    (13) sentencia -> . error NEWLINE
+    (15) declaracion_variable -> . tipo ID
+    (16) declaracion_variable -> . tipo ID EQ expresion
+    (17) asignacion -> . ID EQ expresion
+    (22) sentencia_if -> . KW_IF expresion_booleana PUNTOPUNTO bloque
+    (23) sentencia_if -> . KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque
+    (24) sentencia_while -> . KW_WHILE expresion_booleana PUNTOPUNTO bloque
+    (34) entrada_salida -> . KW_READ LPARENTESIS ID RPARENTESIS
+    (35) entrada_salida -> . KW_WRITE LPARENTESIS expresion RPARENTESIS
+    (25) funcion -> . KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque
+    (18) tipo -> . KW_INT
+    (19) tipo -> . KW_FLOAT
+    (20) tipo -> . KW_STRING
+    (21) tipo -> . KW_BOOL
+
+    NEWLINE         shift and go to state 6
+    DEDENT          reduce using rule 14 (empty -> .)
+    error           shift and go to state 13
+    ID              shift and go to state 15
+    KW_IF           shift and go to state 16
+    KW_WHILE        shift and go to state 17
+    KW_READ         shift and go to state 18
+    KW_WRITE        shift and go to state 19
+    KW_FUNC         shift and go to state 20
+    KW_INT          shift and go to state 21
+    KW_FLOAT        shift and go to state 22
+    KW_STRING       shift and go to state 23
+    KW_BOOL         shift and go to state 24
+
+    sentencias                     shift and go to state 103
+    bloque_sentencia               shift and go to state 3
+    empty                          shift and go to state 4
+    sentencia                      shift and go to state 5
+    declaracion_variable           shift and go to state 7
+    asignacion                     shift and go to state 8
+    sentencia_if                   shift and go to state 9
+    sentencia_while                shift and go to state 10
+    entrada_salida                 shift and go to state 11
+    funcion                        shift and go to state 12
+    tipo                           shift and go to state 14
+
+state 97
+
+    (33) bloque -> INDENT sentencias . DEDENT
+
+    DEDENT          shift and go to state 104
+
+
+state 98
+
+    (60) factor -> ID LPARENTESIS argumentos RPARENTESIS .
+
+    STAR            reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    SLASH           reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    MOD             reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    PLUS            reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    MINUS           reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    LT              reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    GT              reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    LE              reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    GE              reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    EQEQ            reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    NE              reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    NEWLINE         reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    error           reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    ID              reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    KW_IF           reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    KW_WHILE        reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    KW_READ         reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    KW_WRITE        reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    KW_FUNC         reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    KW_INT          reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    KW_FLOAT        reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    KW_STRING       reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    KW_BOOL         reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    $end            reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    DEDENT          reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    RPARENTESIS     reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    PUNTOPUNTO      reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    AND             reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    OR              reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+    COMA            reduce using rule 60 (factor -> ID LPARENTESIS argumentos RPARENTESIS .)
+
+
+state 99
+
+    (30) argumentos -> expresion COMA . argumentos
+    (29) argumentos -> . expresion
+    (30) argumentos -> . expresion COMA argumentos
+    (31) argumentos -> . empty
+    (48) expresion -> . expresion PLUS termino
+    (49) expresion -> . expresion MINUS termino
+    (50) expresion -> . termino
+    (14) empty -> .
+    (51) termino -> . termino STAR factor
+    (52) termino -> . termino SLASH factor
+    (53) termino -> . termino MOD factor
+    (54) termino -> . factor
+    (55) factor -> . ID
+    (56) factor -> . ENTERO
+    (57) factor -> . FLOTANTE
+    (58) factor -> . CADENA
+    (59) factor -> . LPARENTESIS expresion RPARENTESIS
+    (60) factor -> . ID LPARENTESIS argumentos RPARENTESIS
+
+    RPARENTESIS     reduce using rule 14 (empty -> .)
+    ID              shift and go to state 37
+    ENTERO          shift and go to state 38
+    FLOTANTE        shift and go to state 39
+    CADENA          shift and go to state 40
+    LPARENTESIS     shift and go to state 47
+
+    expresion                      shift and go to state 87
+    argumentos                     shift and go to state 105
+    empty                          shift and go to state 88
+    termino                        shift and go to state 35
+    factor                         shift and go to state 36
+
+state 100
+
+    (25) funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS . PUNTOPUNTO bloque
+
+    PUNTOPUNTO      shift and go to state 106
+
+
+state 101
+
+    (26) parametros -> tipo ID .
+    (27) parametros -> tipo ID . COMA parametros
+
+    RPARENTESIS     reduce using rule 26 (parametros -> tipo ID .)
+    COMA            shift and go to state 107
+
+
+state 102
+
+    (23) sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO . bloque
+    (32) bloque -> . NEWLINE INDENT sentencias DEDENT
+    (33) bloque -> . INDENT sentencias DEDENT
+
+    NEWLINE         shift and go to state 74
+    INDENT          shift and go to state 75
+
+    bloque                         shift and go to state 108
+
+state 103
+
+    (32) bloque -> NEWLINE INDENT sentencias . DEDENT
+
+    DEDENT          shift and go to state 109
+
+
+state 104
+
+    (33) bloque -> INDENT sentencias DEDENT .
+
+    KW_ELSE         reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    NEWLINE         reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    error           reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    ID              reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    KW_IF           reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    KW_WHILE        reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    KW_READ         reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    KW_WRITE        reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    KW_FUNC         reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    KW_INT          reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    KW_FLOAT        reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    KW_STRING       reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    KW_BOOL         reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    $end            reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+    DEDENT          reduce using rule 33 (bloque -> INDENT sentencias DEDENT .)
+
+
+state 105
+
+    (30) argumentos -> expresion COMA argumentos .
+
+    RPARENTESIS     reduce using rule 30 (argumentos -> expresion COMA argumentos .)
+
+
+state 106
+
+    (25) funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO . bloque
+    (32) bloque -> . NEWLINE INDENT sentencias DEDENT
+    (33) bloque -> . INDENT sentencias DEDENT
+
+    NEWLINE         shift and go to state 74
+    INDENT          shift and go to state 75
+
+    bloque                         shift and go to state 110
+
+state 107
+
+    (27) parametros -> tipo ID COMA . parametros
+    (26) parametros -> . tipo ID
+    (27) parametros -> . tipo ID COMA parametros
+    (28) parametros -> . empty
+    (18) tipo -> . KW_INT
+    (19) tipo -> . KW_FLOAT
+    (20) tipo -> . KW_STRING
+    (21) tipo -> . KW_BOOL
+    (14) empty -> .
+
+    KW_INT          shift and go to state 21
+    KW_FLOAT        shift and go to state 22
+    KW_STRING       shift and go to state 23
+    KW_BOOL         shift and go to state 24
+    RPARENTESIS     reduce using rule 14 (empty -> .)
+
+    tipo                           shift and go to state 93
+    parametros                     shift and go to state 111
+    empty                          shift and go to state 94
+
+state 108
+
+    (23) sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .
+
+    NEWLINE         reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    error           reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    ID              reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    KW_IF           reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    KW_WHILE        reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    KW_READ         reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    KW_WRITE        reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    KW_FUNC         reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    KW_INT          reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    KW_FLOAT        reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    KW_STRING       reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    KW_BOOL         reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    $end            reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+    DEDENT          reduce using rule 23 (sentencia_if -> KW_IF expresion_booleana PUNTOPUNTO bloque KW_ELSE PUNTOPUNTO bloque .)
+
+
+state 109
+
+    (32) bloque -> NEWLINE INDENT sentencias DEDENT .
+
+    KW_ELSE         reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    NEWLINE         reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    error           reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    ID              reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    KW_IF           reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    KW_WHILE        reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    KW_READ         reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    KW_WRITE        reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    KW_FUNC         reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    KW_INT          reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    KW_FLOAT        reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    KW_STRING       reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    KW_BOOL         reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    $end            reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+    DEDENT          reduce using rule 32 (bloque -> NEWLINE INDENT sentencias DEDENT .)
+
+
+state 110
+
+    (25) funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .
+
+    NEWLINE         reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    error           reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    ID              reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    KW_IF           reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    KW_WHILE        reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    KW_READ         reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    KW_WRITE        reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    KW_FUNC         reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    KW_INT          reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    KW_FLOAT        reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    KW_STRING       reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    KW_BOOL         reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    $end            reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+    DEDENT          reduce using rule 25 (funcion -> KW_FUNC ID LPARENTESIS parametros RPARENTESIS PUNTOPUNTO bloque .)
+
+
+state 111
+
+    (27) parametros -> tipo ID COMA parametros .
+
+    RPARENTESIS     reduce using rule 27 (parametros -> tipo ID COMA parametros .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for NEWLINE in state 5 resolved as shift
