@@ -81,10 +81,35 @@ def t_comment(t):
     pass
 
 def t_NEWLINE(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-    global inicio_linea
-    inicio_linea = True
+    r'\n[ \t]*'
+    t.lexer.lineno += t.value.count('\n')
+    
+    # Calcular la columna de la nueva línea
+    espacios = t.value.split('\n')[-1]
+    col = 0
+    for char in espacios:
+        if char == ' ': col += 1
+        elif char == '\t': col += 4 # O tu tabsize
+        
+    cima = pila_indentacion[-1]
+    
+    if col > cima:
+        pila_indentacion.append(col)
+        t.type = 'INDENT'
+        return t
+    elif col < cima:
+        # Generar múltiples DEDENTs si es necesario
+        while col < pila_indentacion[-1]:
+            pila_indentacion.pop()
+            dedents_pendientes.append('DEDENT')
+        
+        if dedents_pendientes:
+            t.type = dedents_pendientes.pop(0)
+            return t
+    
+    # Si col == cima, es solo un cambio de línea, no cambia indentación
+    # Pero el parser necesita saber que terminó la sentencia
+    t.type = 'NEWLINE'
     return t
 
 def t_INDENT(t):
@@ -369,7 +394,7 @@ parser = yacc.yacc()
 
 
 if __name__ == "__main__":
-    archivo_test = "pruebas/prueba3Input.mlng" 
+    archivo_test = "pruebas/prueba5While.mlng" 
     
     try:
         with open(archivo_test, "r", encoding="utf-8") as f:
