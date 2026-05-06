@@ -35,6 +35,7 @@ keywords = {
     "and": "AND",
     "or": "OR",
     "not": "NOT",
+    "const": "KW_CONST",
 }
 
 tokens += list(set(keywords.values()))

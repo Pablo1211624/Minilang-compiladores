@@ -51,11 +51,17 @@ def p_empty(p):
 
 def p_declaracion_variable(p):
     '''declaracion_variable : tipo ID
-                            | tipo ID EQ expresion'''
+                            | tipo ID EQ expresion
+                            | KW_CONST tipo ID
+                            | KW_CONST tipo ID EQ expresion'''
     if len(p) == 3:
         p[0] = ('decl', p[1], p[2])
-    else:
+    elif len(p) == 5:
         p[0] = ('decl_assign', p[1], p[2], p[4])
+    elif len(p) == 4:
+        p[0] = ('const_decl', p[2], p[3])
+    elif len(p) == 6:
+        p[0] = ('const_decl_assign', p[2], p[3], p[5])
 
 def p_asignacion(p):
     'asignacion : ID EQ expresion'

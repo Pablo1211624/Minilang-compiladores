@@ -114,6 +114,7 @@ def t_ID(t):
 
 def t_FLOTANTE(t):
     r'\d+\.\d+'
+    t.value = float(t.value)
     global linea_token
     col = find_column(t.lexer.lexdata, t)
     print(f"[{t.lexer.lineno}:{col}] TOKEN: FLOTANTE     | Valor: '{t.value}'")
@@ -122,6 +123,7 @@ def t_FLOTANTE(t):
 
 def t_ENTERO(t):
     r'\d+'
+    t.value = int(t.value)
     global linea_token
     col = find_column(t.lexer.lexdata, t)
     print(f"[{t.lexer.lineno}:{col}] TOKEN: ENTERO     | Valor: '{t.value}'")

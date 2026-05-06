@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 from parser import parser
 from lexico import lexer
+from semantico import AnalizadorSemantico
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import os
