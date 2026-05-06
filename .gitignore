@@ -1,0 +1,16 @@
+# entorno virtual
+entorno/
+
+# cache python
+__pycache__/
+*.pyc
+
+# archivos generados por PLY
+parser.out
+parsetab.py
+
+# salidas generadas
+salidas/
+
+# configuracion local vscode
+.vscode/
