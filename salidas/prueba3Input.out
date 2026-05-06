@@ -1,0 +1,49 @@
+--- ANÁLISIS LÉXICO (TOKENS) ---
+[1:1] TOKEN: KW_INT     | Valor: 'int'
+[1:5] TOKEN: ID         | Valor: 'edad'
+[2:1] TOKEN: KW_WRITE   | Valor: 'Write'
+[2:7] TOKEN: CADENA    | Valor: '"Ingrese su edad:"'
+[3:1] TOKEN: KW_READ    | Valor: 'Read'
+[3:6] TOKEN: ID         | Valor: 'edad'
+Linea 3, Columna 10, Simbolo '
+', Error: sintaxis invalida
+[4:1] TOKEN: KW_IF      | Valor: 'if'
+Linea 4, Columna 1, Simbolo 'if', Error: sintaxis invalida
+[4:4] TOKEN: ID         | Valor: 'edad'
+Linea 4, Columna 4, Simbolo 'edad', Error: sintaxis invalida
+Linea 4, Columna 9, Simbolo '>=', Error: sintaxis invalida
+[4:12] TOKEN: ENTERO     | Valor: '18'
+Linea 4, Columna 12, Simbolo '18', Error: sintaxis invalida
+Linea 4, Columna 15, Simbolo '@', Error: Caracter ilegal
+Linea 4, Columna 16, Simbolo '
+    ', Error: sintaxis invalida
+[5:5] TOKEN: KW_WRITE   | Valor: 'Write'
+Linea 5, Columna 5, Simbolo 'Write', Error: sintaxis invalida
+Linea 5, Columna 10, Simbolo '(', Error: sintaxis invalida
+[5:11] TOKEN: CADENA    | Valor: '"Mayor de edad"'
+Linea 5, Columna 11, Simbolo '"Mayor de edad"', Error: sintaxis invalida
+Linea 5, Columna 27, Simbolo '
+', Error: sintaxis invalida
+[6:1] TOKEN: KW_ELSE    | Valor: 'else'
+Linea 6, Columna 1, Simbolo 'else', Error: sintaxis invalida
+Linea 6, Columna 5, Simbolo ':', Error: sintaxis invalida
+Linea 6, Columna 6, Simbolo '
+    ', Error: sintaxis invalida
+[7:5] TOKEN: KW_WRITE   | Valor: 'Write'
+Linea 7, Columna 5, Simbolo 'Write', Error: sintaxis invalida
+Linea 7, Columna 10, Simbolo '(', Error: sintaxis invalida
+[7:11] TOKEN: CADENA    | Valor: '"Menor de edad $"'
+Linea 7, Columna 11, Simbolo '"Menor de edad $"', Error: sintaxis invalida
+Linea 7, Columna 28, Simbolo ')', Error: sintaxis invalida
+Linea 7, Columna 29, Simbolo '
+', Error: sintaxis invalida
+Linea 8, Columna 1, Simbolo '
+', Error: sintaxis invalida
+Linea 9, Columna 1, Simbolo '
+', Error: sintaxis invalida
+
+--- ÁRBOL DE SINTAXIS (AST) ---
+(   'programa',
+    [   ('decl', 'int', 'edad'),
+        ('write', ('val', '"Ingrese su edad:"')),
+        ('read', 'edad')])

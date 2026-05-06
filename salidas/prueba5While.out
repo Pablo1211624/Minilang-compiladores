@@ -1,0 +1,35 @@
+--- ANÁLISIS LÉXICO (TOKENS) ---
+[1:1] TOKEN: KW_INT     | Valor: 'int'
+[1:5] TOKEN: ID         | Valor: 'limite'
+[2:1] TOKEN: KW_INT     | Valor: 'int'
+[2:5] TOKEN: ID         | Valor: 'contador'
+[2:16] TOKEN: ENTERO     | Valor: '1'
+[3:1] TOKEN: KW_WRITE   | Valor: 'Write'
+[3:7] TOKEN: CADENA    | Valor: '"Limite del contador:"'
+[4:1] TOKEN: KW_READ    | Valor: 'Read'
+[4:6] TOKEN: ID         | Valor: 'limite'
+[5:1] TOKEN: KW_WHILE   | Valor: 'while'
+[5:7] TOKEN: ID         | Valor: 'contador'
+[5:19] TOKEN: ID         | Valor: 'limite'
+[6:5] TOKEN: KW_WRITE   | Valor: 'Write'
+[6:11] TOKEN: CADENA    | Valor: '"Contador actual:"'
+[7:5] TOKEN: KW_WRITE   | Valor: 'Write'
+[7:11] TOKEN: ID         | Valor: 'contador'
+[8:5] TOKEN: ID         | Valor: 'contador'
+[8:16] TOKEN: ID         | Valor: 'contador'
+[8:27] TOKEN: ENTERO     | Valor: '1'
+
+--- ÁRBOL DE SINTAXIS (AST) ---
+(   'programa',
+    [   ('decl', 'int', 'limite'),
+        ('decl_assign', 'int', 'contador', ('val', '1')),
+        ('write', ('val', '"Limite del contador:"')),
+        ('read', 'limite'),
+        (   'while',
+            ('rel', '<=', ('val', 'contador'), ('val', 'limite')),
+            [   ('write', ('val', '"Contador actual:"')),
+                ('write', ('val', 'contador')),
+                (   'assign',
+                    'contador',
+                    ('binop', '+', ('val', 'contador'), ('val', '1')))]),
+        '\n'])
