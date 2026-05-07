@@ -27,7 +27,10 @@ def p_bloque_sentencia(p):
     '''bloque_sentencia : sentencia NEWLINE
                         | sentencia
                         | NEWLINE'''
-    p[0] = p[1]
+    if len(p) == 2 and p.slice[1].type == 'NEWLINE':
+        p[0] = None
+    else:
+        p[0] = p[1]
 
 def p_sentencia(p):
     '''sentencia : declaracion_variable
@@ -193,7 +196,10 @@ def p_factor(p):
               | ID LPARENTESIS argumentos RPARENTESIS'''
     
     if len(p) == 2:
-        p[0] = ('val', p[1])
+        if p.slice[1].type == 'ID':
+            p[0] = ('id', p[1])
+        else:
+            p[0] = ('val', p[1])
     elif len(p) == 4:
         p[0] = p[2]
     else:

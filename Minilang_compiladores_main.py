@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 from parser import parser
-from lexico import lexer
+import lexico
 from semantico import AnalizadorSemantico
 import tkinter as tk
 from tkinter import filedialog, messagebox
@@ -88,24 +88,27 @@ class interfazGrafica:
             print(f"Archivo cargado: {filepath}")
 
     def analizar(self):
-        global pila_indentacion, dedents_pendientes, inicio_linea, linea_token, hay_error
         
         codigo = self.editor.get(1.0, tk.END)
         if not codigo.endswith('\n'):
             codigo += '\n'
         codigo += '\n' 
-        lexer.lineno=1
-        pila_indentacion=[0]
-        dedents_pendientes=[]
-        inicio_linea = True
-        linea_token = False
+        lexico.lexer.lineno=1
+        lexico.pila_indentacion=[0]
+        lexico.dedents_pendientes=[]
+        lexico.inicio_linea = True
+        lexico.linea_token = False
         hay_error = False
 
         self.consolaMensaje.config(state=tk.NORMAL)
         self.consolaMensaje.delete(1.0, tk.END)
         self.consolaMensaje.config(state=tk.DISABLED)
         try:
-            resultado = parser.parse(codigo, lexer=lexer)
+            resultado = parser.parse(codigo, lexer=lexico.lexer)
+            semantico = AnalizadorSemantico()
+            semantico.analizar(resultado)
+            print("\nAnálisis semántico completado.")
+            semantico.tabla_simbolos.imprimir()
             if self.archivoActual:
                 nombreSinExte = os.path.splitext(os.path.basename(self.archivoActual))[0]
                 if not os.path.exists("salidas"): os.makedirs("salidas")
@@ -121,6 +124,17 @@ class interfazGrafica:
                     # Usamos pformat para convertir el árbol en un string con sangría (indent)
                     arbol_formateado = pprint.pformat(resultado, indent=4, width=80)
                     archivoout.write(arbol_formateado)
+                    archivoout.write("\n\n--- ANÁLISIS SEMÁNTICO (TABLA DE SÍMBOLOS) ---\n")
+                    for nombre, simbolo in semantico.tabla_simbolos.tabla.items():
+                        archivoout.write(
+f"""
+Nombre      : {nombre}
+Tipo        : {simbolo['tipo']}
+Valor       : {simbolo['valor']}
+Constante   : {simbolo['constante']}
+
+"""
+)
             
                 print(f"\n[INFO] Archivo de salida guardado en: {rutaOut}")
 
