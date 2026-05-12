@@ -3,40 +3,83 @@ class TablaSimbolos:
     def __init__(self):
         #trabajamos la tabla como diccionario
         self.tabla = {}
+        self.ambitos = []
+        self.entrar_ambito("global") 
+        self.historial_ambitos = []
 
     #metodo en el cual declaramos una variable por primera vez
     def declarar(self, nombre, tipo, valor=None, constante=False):
+        ambito_actual = self.ambitos[-1]["variables"]
+        if nombre in ambito_actual:
+            print(f"Error: Variable '{nombre}' ya declarada en el ámbito actual.")
+            return
 
-        self.tabla[nombre] = {
-
+        ambito_actual[nombre] = {
             "tipo": tipo,
             "valor": valor,
             "constante": constante
         }
+    
+    def entrar_ambito(self, nombre):
+        self.ambitos.append({
+            "nombre": nombre,
+            "variables": {}
+        })
+
+    def salir_ambito(self):
+        if len(self.ambitos) > 1:  # No salir del ámbito global
+            ambito_salido = self.ambitos.pop()
+            self.historial_ambitos.append(ambito_salido)
+
 
     #metodo para verificar si una variable ya existe en la tabla de simbolos
     def existe(self, nombre):
-
-        return nombre in self.tabla
+        for ambito in reversed(self.ambitos):
+            if nombre in ambito["variables"]:
+                return True
+        return False
+    
+    #metodo para verificar si una variable existe en el ambito actual solamente
+    def existe_en_ambito_actual(self, nombre):
+        if self.ambitos:
+            ambito_actual = self.ambitos[-1]["variables"]
+            return nombre in ambito_actual
+        return False
 
     #retorna la variable de la tabla de simbolos por su nombre
     def obtener(self, nombre):
-
-        return self.tabla[nombre]
+        for ambito in reversed(self.ambitos):
+            if nombre in ambito["variables"]:
+                return ambito["variables"][nombre]
+        return None
 
     #actualiza el valor de una variable ya declarada
     def insertar(self, nombre, valor):
 
-        self.tabla[nombre]["valor"] = valor
+        for ambito in reversed(self.ambitos):
+            if nombre in ambito["variables"]:
+                ambito["variables"][nombre]["valor"] = valor
+                return
 
 
     def imprimir(self):
 
         print("\nTABLA DE SIMBOLOS")
-
-        for nombre, datos in self.tabla.items():
-
-            print(f"Nombre     : {nombre}\nTipo       : {datos['tipo']}\nValor      : {datos['valor']}\nConstante  : {datos['constante']}")
+        todos_los_ambitos = self.ambitos + self.historial_ambitos
+        for ambito in todos_los_ambitos:
+            print(f"\nÁmbito: {ambito['nombre']}")
+            variables = ambito["variables"]
+            if not variables:
+                print("  (No hay variables en este ámbito)")
+            for nombre, simbolo in variables.items():
+                print(
+  f"""  
+  Nombre      : {nombre}
+  Tipo        : {simbolo['tipo']}
+  Valor       : {simbolo['valor']}
+  Constante   : {simbolo['constante']}
+  """
+                )
 
 class AnalizadorSemantico:
     def __init__(self):
@@ -62,8 +105,8 @@ class AnalizadorSemantico:
         if tipo_produccion == 'decl':
             tipo = produccion[1] #tipo de dato
             nombre = produccion[2] #nombre de la variable
-            if self.tabla_simbolos.existe(nombre):
-                print(f"Error: Variable '{nombre}' ya declarada.")
+            if self.tabla_simbolos.existe_en_ambito_actual(nombre):
+                print(f"Error: Variable '{nombre}' ya declarada en el ámbito actual.")
                 return
             self.tabla_simbolos.declarar(nombre, tipo) #declaramos la variable en la tabla de simbolos
 
@@ -73,8 +116,8 @@ class AnalizadorSemantico:
             tipo = produccion[1]
             nombre = produccion[2] 
             valor = self.evaluar_expresion(produccion[3]) #valor asignado
-            if self.tabla_simbolos.existe(nombre):
-                print(f"Error: Variable '{nombre}' ya declarada.")
+            if self.tabla_simbolos.existe_en_ambito_actual(nombre):
+                print(f"Error: Variable '{nombre}' ya declarada en el ámbito actual.")
                 return
             tipo_valor = self.tipo_expresion(produccion[3])
             if tipo != tipo_valor:
@@ -86,8 +129,8 @@ class AnalizadorSemantico:
         elif tipo_produccion == 'const_decl':
             tipo = produccion[1] 
             nombre = produccion[2]
-            if self.tabla_simbolos.existe(nombre):
-                print(f"Error: Variable '{nombre}' ya declarada.")
+            if self.tabla_simbolos.existe_en_ambito_actual(nombre):
+                print(f"Error: Variable '{nombre}' ya declarada en el ámbito actual.")
                 return
             self.tabla_simbolos.declarar(nombre, tipo, constante=True) #declaramos la constante en la tabla de simbolos
 
@@ -95,8 +138,8 @@ class AnalizadorSemantico:
         elif tipo_produccion == 'const_decl_assign':
             tipo = produccion[1] 
             nombre = produccion[2] 
-            if self.tabla_simbolos.existe(nombre):
-                print(f"Error: Variable '{nombre}' ya declarada.")
+            if self.tabla_simbolos.existe_en_ambito_actual(nombre):
+                print(f"Error: Variable '{nombre}' ya declarada en el ámbito actual.")
                 return
             tipo_valor = self.tipo_expresion(produccion[3])
             if tipo != tipo_valor:
@@ -137,12 +180,16 @@ class AnalizadorSemantico:
                 return
             
             bloque_if = produccion[2]
+            self.tabla_simbolos.entrar_ambito("if") #entramos a un nuevo ambito para el bloque if
             for instruccion in bloque_if:
                 self.analizar_produccion(instruccion)
+            self.tabla_simbolos.salir_ambito() #salimos del ambito del bloque if
             bloque_else = produccion[3]
             if bloque_else is not None:
+                self.tabla_simbolos.entrar_ambito("else") #entramos a un nuevo ambito para el bloque else
                 for instruccion in bloque_else:
                     self.analizar_produccion(instruccion)
+                self.tabla_simbolos.salir_ambito() #salimos del ambito del bloque else
 
         elif tipo_produccion == 'while':
             condicion = produccion[1]
@@ -152,8 +199,10 @@ class AnalizadorSemantico:
                 return
             
             bloque_while = produccion[2]
+            self.tabla_simbolos.entrar_ambito("while") #entramos a un nuevo ambito para el bloque while
             for instruccion in bloque_while:
                 self.analizar_produccion(instruccion)
+            self.tabla_simbolos.salir_ambito() #salimos del ambito del bloque while
 
         
 
